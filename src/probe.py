@@ -153,3 +153,34 @@ def build_v_sham_diff_in_diff(model, seed=999):
         diff = delta1 - delta2
         v_sham = diff / (diff.norm() + 1e-9)
     return v_sham
+
+
+def jacobian_of_margin(model, obj_id: torch.Tensor, ctx_id: torch.Tensor,
+                        class_pos: int, class_neg: int) -> torch.Tensor:
+    """
+    J(o,c) = grad_h [ logit(class_pos) - logit(class_neg) ] at hidden state h(o,c).
+    This is THE direction in hidden space along which changing the
+    representation changes the model's actual red/blue decision -- not a
+    hand-selected probe or subtraction, but the true local causal gradient
+    of the readout. Returns a [hidden_dim] tensor (not normalized -- the
+    raw Jacobian, since both its direction AND magnitude are meaningful).
+    """
+    h = model.hidden(obj_id, ctx_id)
+    h = h.detach().requires_grad_(True)
+    logits = model.fc2(h)
+    margin = logits[0, class_pos] - logits[0, class_neg]
+    grad = torch.autograd.grad(margin, h)[0].squeeze(0)
+    return grad
+
+
+def jacobian_zor_red_vs_blue(model, ctx_name="CTX_RED"):
+    """J_zor at the given context, for the red-vs-blue margin."""
+    zor_id = torch.tensor([OBJ2ID[SPECIAL_OBJECT]], dtype=torch.long)
+    ctx_id = torch.tensor([CTX2ID[ctx_name]], dtype=torch.long)
+    return jacobian_of_margin(model, zor_id, ctx_id, COLOR2ID["red"], COLOR2ID["blue"])
+
+
+def cosine_alignment(v1: torch.Tensor, v2: torch.Tensor) -> float:
+    n1 = v1.norm() + 1e-9
+    n2 = v2.norm() + 1e-9
+    return (v1 @ v2 / (n1 * n2)).item()
