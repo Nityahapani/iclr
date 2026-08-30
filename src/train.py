@@ -24,11 +24,11 @@ def train_phase(model, dataset: PhaseDataset, steps: int, batch_size: int,
 
     if eval_set is None:
         eval_set = dataset.full_eval_set()
-    eval_objs, eval_labels = eval_set
+    eval_objs, eval_ctxs, eval_labels = eval_set
 
     for step in range(steps):
-        objs, labels = dataset.sample_batch(batch_size, rng)
-        logits = model(objs)
+        objs, ctxs, labels = dataset.sample_batch(batch_size, rng)
+        logits = model(objs, ctxs)
         loss = F.cross_entropy(logits, labels)
         opt.zero_grad()
         loss.backward()
@@ -36,7 +36,7 @@ def train_phase(model, dataset: PhaseDataset, steps: int, batch_size: int,
 
         if step % eval_every == 0 or step == steps - 1:
             with torch.no_grad():
-                eval_logits = model(eval_objs)
+                eval_logits = model(eval_objs, eval_ctxs)
                 eval_probs = F.softmax(eval_logits, dim=-1)
                 acc = (eval_logits.argmax(-1) == eval_labels).float().mean().item()
             log.append({
