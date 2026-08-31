@@ -180,7 +180,69 @@ def jacobian_zor_red_vs_blue(model, ctx_name="CTX_RED"):
     return jacobian_of_margin(model, zor_id, ctx_id, COLOR2ID["red"], COLOR2ID["blue"])
 
 
+def jacobian_fenn_green_vs_blue(model, ctx_name="CTX_RED"):
+    """
+    J_fenn: sham-history object's local causal gradient, for the GREEN-vs-blue
+    margin (fenn's phase-C binding was CTX_RED->green, not red -- so the
+    matched contrast for fenn is green-vs-blue, not red-vs-blue).
+    """
+    from src.task import SHAM_OBJECT
+    fenn_id = torch.tensor([OBJ2ID[SHAM_OBJECT]], dtype=torch.long)
+    ctx_id = torch.tensor([CTX2ID[ctx_name]], dtype=torch.long)
+    return jacobian_of_margin(model, fenn_id, ctx_id, COLOR2ID["green"], COLOR2ID["blue"])
+
+
 def cosine_alignment(v1: torch.Tensor, v2: torch.Tensor) -> float:
     n1 = v1.norm() + 1e-9
     n2 = v2.norm() + 1e-9
     return (v1 @ v2 / (n1 * n2)).item()
+
+
+def ablate_along_J(model, obj_id, ctx_id, J: torch.Tensor, alpha: float = 1.0):
+    """
+    h' = h - alpha * (J . h / ||J||^2) * J   -- remove the component of h
+    along the (unnormalized) Jacobian direction J. Returns logits computed
+    from the intervened hidden state.
+    """
+    with torch.no_grad():
+        h = model.hidden(obj_id, ctx_id).squeeze(0)
+        J_normsq = (J @ J) + 1e-9
+        coeff = (J @ h) / J_normsq
+        h_ablated = h - alpha * coeff * J
+        logits = model.fc2(h_ablated.unsqueeze(0))
+    return logits
+
+
+def causal_mediation_effect(model, J_A: torch.Tensor, object_name: str,
+                             class_pos_name: str, class_neg_name: str, alpha: float = 1.0):
+    """
+    Delta_A(t) = m_intervened - m_normal, where m is the (class_pos - class_neg)
+    logit margin for `object_name` in CTX_RED, and the intervention removes the
+    component of the object's CURRENT hidden state along a FROZEN historical
+    direction J_A. Generalized over object/class pair so the same function
+    serves both zor (red-vs-blue) and fenn (green-vs-blue, the sham lineage).
+
+    This tests function, not structure: does manipulating the old causal
+    direction still move the model's current output? rho_A tells us the
+    geometry persists; this tells us whether that geometry still does
+    anything (Hypothesis A: fossil, Delta_A -> 0) or whether the old
+    computation is still live but overridden downstream (Hypothesis B:
+    latent persistence, Delta_A stays large).
+    """
+    obj_id = torch.tensor([OBJ2ID[object_name]], dtype=torch.long)
+    ctx_red = torch.tensor([CTX2ID["CTX_RED"]], dtype=torch.long)
+    pos_id = COLOR2ID[class_pos_name]
+    neg_id = COLOR2ID[class_neg_name]
+
+    with torch.no_grad():
+        normal_logits = model(obj_id, ctx_red)
+        m_normal = (normal_logits[0, pos_id] - normal_logits[0, neg_id]).item()
+
+    intervened_logits = ablate_along_J(model, obj_id, ctx_red, J_A, alpha=alpha)
+    m_intervened = (intervened_logits[0, pos_id] - intervened_logits[0, neg_id]).item()
+
+    return {
+        "m_normal": m_normal,
+        "m_intervened": m_intervened,
+        "delta_A": m_intervened - m_normal,
+    }

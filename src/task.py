@@ -43,9 +43,16 @@ SPECIAL_OBJECT = "zor"          # the object under study (context-dependent, his
 CONTROL_OBJECT = "vex"          # structurally matched control: ALSO context-dependent,
                                  # but its context-dependence is stable across all of training
                                  # (never changes phase-to-phase). Used for the
-                                 # difference-in-differences subtraction.
+                                 # difference-in-differences subtraction (v1/v2, retained for reference).
+SHAM_OBJECT = "fenn"            # sham-history object: undergoes an A-analog phase (phase "C")
+                                 # matched to real phase A in every measurable training-dynamics
+                                 # property (num examples, steps, loss trajectory, final accuracy),
+                                 # but teaches a DIFFERENT binding (fenn=green, not fenn=red) before
+                                 # being overwritten to fenn=blue in phase B, same as zor. Used to
+                                 # test whether rho_A is specific to WHAT was learned (red) or merely
+                                 # to the fact THAT this parameter region underwent an earlier phase.
 
-ALL_OBJECTS = FILLER_OBJECTS + [SPECIAL_OBJECT, CONTROL_OBJECT]
+ALL_OBJECTS = FILLER_OBJECTS + [SPECIAL_OBJECT, CONTROL_OBJECT, SHAM_OBJECT]
 OBJ2ID = {o: i for i, o in enumerate(ALL_OBJECTS)}
 
 VOCAB_SIZE = len(ALL_OBJECTS)
@@ -64,39 +71,51 @@ def make_filler_mapping(seed: int):
 
 
 # CONTROL_OBJECT's context-dependent mapping: fixed for ALL phases (A, B, B_only).
-# This is what makes it a valid "generic context computation" reference: its
-# red/blue-context sensitivity never changes, so subtracting it removes only
-# the PART of the red/blue-context direction that has nothing to do with zor's
-# specific history.
 CONTROL_CTX_MAPPING = {"CTX_RED": "red", "CTX_BLUE": "blue"}
+
+# SHAM_OBJECT's phase-C mapping: context-dependent like zor's phase-A mapping,
+# but teaches a DIFFERENT color (green, not red) for CTX_RED. In phase C,
+# CTX_BLUE still maps to blue (matching zor's phase-A rule structurally) so
+# that only the "what does CTX_RED mean" binding differs between zor and fenn.
+SHAM_CTX_MAPPING = {"CTX_RED": "green", "CTX_BLUE": "blue"}
 
 
 class PhaseDataset:
     """
     Generates (object_id, context_id, label_id) triples for a given phase.
 
-    phase='A':      zor is context-dependent per CONTROL_CTX_MAPPING (CTX_RED->red, CTX_BLUE->blue)
-                     [i.e. during phase A, zor behaves exactly like the control object]
-    phase='B':       zor is CONTEXT-INDEPENDENT and always blue, regardless of context
-                     [this is the "overwrite": zor's context-sensitivity is destroyed,
-                      it now always says blue -- this IS the behavioral erasure of A]
-    phase='B_only':  same as B (control population, zor never had context-dependence)
+    phase='A':      zor is context-dependent per CONTROL_CTX_MAPPING (CTX_RED->red, CTX_BLUE->blue).
+                     SHAM_OBJECT (fenn) is context-dependent per SHAM_CTX_MAPPING (CTX_RED->green,
+                     CTX_BLUE->blue) -- this is phase "C": matched in structure/frequency/steps to
+                     phase A, but teaches a different binding.
+    phase='B':       BOTH zor and fenn become context-INDEPENDENT and always predict blue,
+                     regardless of context (the overwrite/erasure phase, applied identically
+                     to both the real-history and sham-history objects).
+    phase='B_only':  same generation logic as B (from-scratch control population; zor and fenn
+                     never had ANY earlier phase in this population).
 
-    Filler objects and the control object behave identically across all phases
-    (their generation logic never changes), which is what makes cross-phase/
-    cross-population comparison fair.
+    Filler objects and the control object (vex) behave identically across all
+    phases (their generation logic never changes).
     """
-    def __init__(self, filler_mapping, phase: str, zor_frac: float = 0.12, ctrl_frac: float = 0.12):
+    def __init__(self, filler_mapping, phase: str, zor_frac: float = 0.10,
+                 ctrl_frac: float = 0.10, sham_frac: float = 0.10):
         self.filler_mapping = filler_mapping
         self.phase = phase
         assert phase in ("A", "B", "B_only")
         self.zor_frac = zor_frac
         self.ctrl_frac = ctrl_frac
+        self.sham_frac = sham_frac
 
     def _zor_label(self, ctx: str) -> str:
         if self.phase == "A":
-            return CONTROL_CTX_MAPPING[ctx]  # context-dependent, same rule as control object
-        else:  # B or B_only: context-independent, always blue
+            return CONTROL_CTX_MAPPING[ctx]
+        else:
+            return "blue"
+
+    def _fenn_label(self, ctx: str) -> str:
+        if self.phase == "A":  # phase "C" for fenn happens concurrently with phase A for zor
+            return SHAM_CTX_MAPPING[ctx]
+        else:
             return "blue"
 
     def sample_batch(self, batch_size: int, rng: np.random.RandomState):
@@ -110,9 +129,12 @@ class PhaseDataset:
             elif r < self.zor_frac + self.ctrl_frac:
                 o = CONTROL_OBJECT
                 c = CONTROL_CTX_MAPPING[ctx]
+            elif r < self.zor_frac + self.ctrl_frac + self.sham_frac:
+                o = SHAM_OBJECT
+                c = self._fenn_label(ctx)
             else:
                 o = rng.choice(FILLER_OBJECTS)
-                c = self.filler_mapping[o]  # context-independent
+                c = self.filler_mapping[o]
             objs.append(OBJ2ID[o])
             ctxs.append(CTX2ID[ctx])
             labels.append(COLOR2ID[c])
@@ -128,14 +150,14 @@ class PhaseDataset:
                 objs.append(OBJ2ID[o]); ctxs.append(CTX2ID[ctx]); labels.append(COLOR2ID[self.filler_mapping[o]])
             objs.append(OBJ2ID[CONTROL_OBJECT]); ctxs.append(CTX2ID[ctx]); labels.append(COLOR2ID[CONTROL_CTX_MAPPING[ctx]])
             objs.append(OBJ2ID[SPECIAL_OBJECT]); ctxs.append(CTX2ID[ctx]); labels.append(COLOR2ID[self._zor_label(ctx)])
+            objs.append(OBJ2ID[SHAM_OBJECT]); ctxs.append(CTX2ID[ctx]); labels.append(COLOR2ID[self._fenn_label(ctx)])
         return (torch.tensor(objs, dtype=torch.long),
                 torch.tensor(ctxs, dtype=torch.long),
                 torch.tensor(labels, dtype=torch.long))
 
     def zor_ctrl_probe_set(self):
         """The 4 canonical (object, context) pairs needed for the
-        difference-in-differences v_A construction: zor & control object,
-        each in CTX_RED and CTX_BLUE."""
+        difference-in-differences v_A construction (v1/v2, retained for reference)."""
         pairs = [
             (SPECIAL_OBJECT, "CTX_RED"), (SPECIAL_OBJECT, "CTX_BLUE"),
             (CONTROL_OBJECT, "CTX_RED"), (CONTROL_OBJECT, "CTX_BLUE"),
