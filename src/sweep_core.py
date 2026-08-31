@@ -27,7 +27,7 @@ from src.task import (make_filler_mapping, PhaseDataset, OBJ2ID, CTX2ID, COLOR2I
 from src.model import TinyClassifier
 from src.train import train_phase, find_matched_checkpoint
 from src.probe import (jacobian_zor_red_vs_blue, jacobian_fenn_green_vs_blue,
-                        cosine_alignment, causal_mediation_effect)
+                        cosine_alignment, causal_mediation_effect, measure_Q_A_isolation)
 
 
 def zor_red_ctx_behavior(model):
@@ -88,6 +88,11 @@ def run_single_config(config: dict, seed: int, verbose: bool = False) -> dict:
     if not is_red_A:
         return {"config": config, "seed": seed, "status": "FAILED_PHASE_A", "phase_A_acc": phase_A_acc}
 
+    # Q_A: pre-registered isolation metric, computed at theta_A, BEFORE any
+    # B-training exists. This ordering is essential -- Q_A must be a property
+    # of the model prior to interference, not fit to the outcome.
+    Q_A, _ = measure_Q_A_isolation(model_A, J_A_zor, filler_mapping)
+
     theta_A_state = copy.deepcopy(model_A.state_dict())
 
     # --- Phase B (treatment, A->B), with optional weight decay ---
@@ -141,6 +146,7 @@ def run_single_config(config: dict, seed: int, verbose: bool = False) -> dict:
         "seed": seed,
         "status": "OK",
         "phase_A_acc": phase_A_acc,
+        "Q_A": Q_A,
         "matching_kl": matched_kl,
         "matching_step": matched_entry["step"],
         "theta_T_acc_AB": matched_entry["eval_acc"],

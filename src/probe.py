@@ -14,6 +14,7 @@ looking at the readout weights, and validated causally below.
 """
 import torch
 import torch.nn.functional as F
+import numpy as np
 
 from src.task import (OBJ2ID, CTX2ID, COLOR2ID, SPECIAL_OBJECT, CONTROL_OBJECT,
                        FILLER_OBJECTS, CONTROL_CTX_MAPPING)
@@ -246,3 +247,59 @@ def causal_mediation_effect(model, J_A: torch.Tensor, object_name: str,
         "m_intervened": m_intervened,
         "delta_A": m_intervened - m_normal,
     }
+
+
+def measure_Q_A_isolation(model_at_theta_A, J_A: torch.Tensor, filler_mapping, n_directions=8):
+    """
+    Q_A: how ISOLATED is the A-stage mechanism (J_A) from the rest of the
+    model's live computation at theta_A, before any B-training/interference.
+
+    Operationalization (pre-registered, single quantity, computed BEFORE
+    seeing any theta_T outcome): collect the causal Jacobians (same
+    construction as J_A, i.e. grad_h of a class-margin) for a sample of
+    OTHER live decisions the model makes at theta_A -- specifically, the
+    margin Jacobians for each filler object's own top-vs-runner-up class,
+    which represent "the rest of the computation" sharing the same hidden
+    space. Q_A is defined as 1 minus the mean squared cosine alignment
+    between J_A and this basis of other-task Jacobians:
+
+        Q_A = 1 - mean_i [ cos(J_A, J_filler_i)^2 ]
+
+    Q_A near 1: J_A is nearly orthogonal to everything else the model
+                computes -- an "isolated" mechanism.
+    Q_A near 0: J_A substantially overlaps with directions the model needs
+                for other live computations -- an "entangled" mechanism.
+
+    Hypothesis: entangled mechanisms (low Q_A) are more exposed to
+    collateral damage under weight decay (decay pressure on shared
+    directions hits the old mechanism too), predicting LOWER rho_A(T) and
+    LOWER frac_remaining(T) under parameter pressure. Isolated mechanisms
+    (high Q_A) should be comparatively protected even under decay, since
+    decay pressure on their private direction doesn't compete with any
+    other live objective.
+    """
+    from src.task import FILLER_OBJECTS, OBJ2ID, CTX2ID, COLOR2ID
+    import random
+
+    rng = random.Random(0)  # fixed sub-sample, not seed-dependent, so Q_A's
+                             # sampling itself introduces no extra seed noise
+    sampled_fillers = rng.sample(FILLER_OBJECTS, min(n_directions, len(FILLER_OBJECTS)))
+
+    other_jacobians = []
+    ctx_red = torch.tensor([CTX2ID["CTX_RED"]], dtype=torch.long)
+    for f in sampled_fillers:
+        f_id = torch.tensor([OBJ2ID[f]], dtype=torch.long)
+        true_color = COLOR2ID[filler_mapping[f]]
+        with torch.no_grad():
+            logits = model_at_theta_A(f_id, ctx_red)
+            # runner-up class (excluding the true class) defines the
+            # relevant "other live decision" margin for this filler
+            logits_masked = logits.clone()
+            logits_masked[0, true_color] = -1e9
+            runner_up = logits_masked.argmax(-1).item()
+        J_f = jacobian_of_margin(model_at_theta_A, f_id, ctx_red, true_color, runner_up)
+        other_jacobians.append(J_f)
+
+    cos_sq = [cosine_alignment(J_A, J_f) ** 2 for J_f in other_jacobians]
+    Q_A = 1.0 - float(np.mean(cos_sq))
+    return Q_A, cos_sq
