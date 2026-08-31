@@ -12,12 +12,26 @@ import torch.nn as nn
 
 class TinyClassifier(nn.Module):
     def __init__(self, vocab_size, context_vocab_size, num_classes,
-                 embed_dim=16, ctx_embed_dim=8, hidden_dim=32):
+                 embed_dim=16, ctx_embed_dim=8, hidden_dim=32, bottleneck_dim=None):
+        """
+        bottleneck_dim: if set, inserts a low-rank bottleneck (hidden_dim ->
+        bottleneck_dim -> hidden_dim, via fc1b/fc1c) BEFORE the final hidden
+        representation used for the readout. This is the capacity-scarcity
+        manipulation: a narrow bottleneck forces B-training to physically
+        reuse/overwrite the SAME limited set of directions zor's red-binding
+        used, rather than routing around it with fresh unused capacity (the
+        likely mechanism behind Hypothesis B in the unconstrained model).
+        When bottleneck_dim is None, behaves exactly like the original model.
+        """
         super().__init__()
         self.embed = nn.Embedding(vocab_size, embed_dim)
         self.ctx_embed = nn.Embedding(context_vocab_size, ctx_embed_dim)
         self.fc1 = nn.Linear(embed_dim + ctx_embed_dim, hidden_dim)
         self.act = nn.Tanh()
+        self.bottleneck_dim = bottleneck_dim
+        if bottleneck_dim is not None:
+            self.bneck_down = nn.Linear(hidden_dim, bottleneck_dim)
+            self.bneck_up = nn.Linear(bottleneck_dim, hidden_dim)
         self.fc2 = nn.Linear(hidden_dim, num_classes)
 
     def hidden(self, obj_ids, ctx_ids):
@@ -25,6 +39,8 @@ class TinyClassifier(nn.Module):
         c = self.ctx_embed(ctx_ids)
         combined = torch.cat([e, c], dim=-1)
         h = self.act(self.fc1(combined))
+        if self.bottleneck_dim is not None:
+            h = self.act(self.bneck_up(self.bneck_down(h)))
         return h
 
     def forward(self, obj_ids, ctx_ids):

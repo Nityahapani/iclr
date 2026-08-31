@@ -62,6 +62,7 @@ def run_single_config(config: dict, seed: int, verbose: bool = False) -> dict:
     phase_B_lr = config.get("phase_B_lr", 0.005)
     weight_decay = config.get("weight_decay", 0.0)
     batch_size = config.get("batch_size", 32)
+    bottleneck_dim = config.get("bottleneck_dim", None)
 
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -73,7 +74,8 @@ def run_single_config(config: dict, seed: int, verbose: bool = False) -> dict:
 
     def new_model():
         return TinyClassifier(VOCAB_SIZE, CONTEXT_VOCAB_SIZE, NUM_CLASSES,
-                               embed_dim=embed_dim, ctx_embed_dim=ctx_embed_dim, hidden_dim=hidden_dim)
+                               embed_dim=embed_dim, ctx_embed_dim=ctx_embed_dim, hidden_dim=hidden_dim,
+                               bottleneck_dim=bottleneck_dim)
 
     # --- Phase A ---
     model_A = new_model()
