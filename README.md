@@ -212,3 +212,48 @@ but unpredictably in magnitude across otherwise-identical training runs.
 Raw data: `results/factorial_C1.json`, `results/factorial_C2.json`,
 `results/factorial_C3_batch1.json` + `factorial_C3_batch2.json`,
 `results/factorial_v1_summary.json`.
+
+---
+
+## Preregistered follow-up: does Q_A (mechanism isolation at theta_A) predict the C3 variance?
+
+Per reviewer suggestion, rather than hyperparameter-searching the cause of
+C3's large seed variance (rho_A in [-0.42, 0.91] at a fixed config), we
+preregistered a single candidate quantity **before running it against
+outcomes**:
+
+`Q_A = 1 - mean_i[ cos(J_A^zor, J_filler_i)^2 ]`, computed at theta_A (before
+any B-training) against 8 sampled filler objects' own live decision-Jacobians.
+Q_A near 1 = zor's mechanism is nearly orthogonal to everything else the
+model computes ("isolated"); Q_A near 0 = substantial overlap with other
+live computations ("entangled"). Hypothesis: low Q_A predicts more
+collateral damage under weight decay (lower rho_A(T), lower frac_remaining(T)
+in C3), since decay pressure on shared directions should hit the old
+mechanism harder when it isn't privately encoded.
+
+**Result: negative.** n=20 seeds, C3 condition.
+`Q_A` vs `rho_A(T)`: Spearman=0.074, p=0.76.
+`Q_A` vs `frac_remaining(T)`: Spearman=0.128, p=0.59.
+Q_A itself is fairly tightly clustered (range [0.64, 0.96], mean 0.82) and
+carries no detectable relationship to either outcome. As specified in the
+preregistration, this is reported as a clean negative rather than followed
+by searching for a second metric to salvage the hypothesis. The C3 seed
+variance remains unexplained; whatever determines it is not simply "how
+isolated was the mechanism before interference," at least not as measured
+here.
+
+Raw data: `results/QA_C3_batch1.json`, `results/QA_C3_batch2.json`,
+`results/QA_C3_test.json`.
+
+## Status: locked
+
+The empirical finding stands as: **behavioral override is not mechanistic
+erasure; capacity limitation alone fails to induce erasure; weight-decay-style
+parameter pressure induces erasure but does so via correlated (not
+selective) decay of both structure and function, with substantial
+seed-to-seed variance whose cause is not yet identified.** Further
+speculative hyperparameter search is deliberately not pursued past this
+point, per the concern about researcher degrees of freedom raised during
+this project. Any future work on the source of the C3 variance should
+preregister its hypothesis and quantity before looking at outcomes, as done
+here.
