@@ -1,0 +1,20 @@
+{
+  "n_seeds": 20,
+  "candidate_frac_mean": 0.038051215448851414,
+  "candidate_frac_std": 0.038276860035001456,
+  "baseline_frac_mean": 0.9507830303249094,
+  "baseline_frac_std": 0.11059607415074635,
+  "paired_diff_mean": -0.9127318148760579,
+  "paired_diff_std": 0.12011750242055769,
+  "paired_ttest_t": -33.121782116894096,
+  "paired_ttest_p": 2.8535010806544653e-18,
+  "wilcoxon_W": 0.0,
+  "wilcoxon_p": 1.9073486328125e-06,
+  "candidate_rho_A_gap_mean": 0.4179982302288357,
+  "candidate_rho_A_gap_min": -0.13204985484480858,
+  "candidate_rho_A_AB_mean": 0.46118526601203486,
+  "candidate_rho_A_AB_min": -0.09568945318460464,
+  "n_fossil": 20,
+  "n_ambiguous": 0,
+  "n_latent": 0
+}

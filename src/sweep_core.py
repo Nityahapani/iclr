@@ -127,7 +127,7 @@ def run_single_config(config: dict, seed: int, verbose: bool = False) -> dict:
 
     fraction_remaining = abs(mediation_T["delta_A"]) / (abs(mediation_A_reference["delta_A"]) + 1e-9)
 
-    if fraction_remaining < 0.15:
+    if fraction_remaining < 0.15 and rho_A_AB > 0.8:
         hypothesis = "A_fossil"
     elif fraction_remaining > 0.5:
         hypothesis = "B_latent_persistence"
