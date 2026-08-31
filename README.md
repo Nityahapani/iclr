@@ -139,3 +139,76 @@ premise.
    as a first-class variable, tracking rho_A(t) and delta_A(t) jointly.
 5. Scale up model/task complexity only after the small-scale phenomenon
    (whichever hypothesis wins) is confirmed robust across seeds.
+
+---
+
+## FINAL RESULT: the preregistered factorial (n=20/condition, no thresholding)
+
+After the exploratory sweep found no config that cleanly separated "structure
+survives, function dies" from ordinary degradation, we dropped the
+`rho_A>0.8, frac<0.15` fossil-detection thresholds entirely (those were
+engineering criteria for a hoped-for result, not theoretically motivated —
+tuning toward them would have meant optimizing the experiment to pass its
+own test) and instead ran a frozen, preregistered 3-condition factorial,
+reporting the **raw joint distribution** of `(rho_A, fraction_mediation_remaining)`
+per condition:
+
+- **C1 (wide, no decay)** — baseline. `rho_A_AB`: mean 0.987, **std 0.0035**
+  (extremely tight across 20 seeds). `frac_remaining`: mean 0.95, std 0.11.
+  **Spearman(rho_A, frac_remaining) = -0.017, p=0.94** — no relationship.
+- **C2 (sparse bottleneck=2, no decay)** — capacity scarcity alone.
+  `rho_A_AB`: mean 0.991, std 0.0059 — *if anything slightly higher/tighter*
+  than C1. `frac_remaining`: mean 1.23 (higher than C1). **Spearman = 0.045,
+  p=0.85** — still no relationship. Capacity scarcity alone does not create
+  or reveal any structure/function decoupling.
+- **C3 (sparse bottleneck=2 + weight_decay=0.1, longer B-training)** — the
+  strongest plausible overwrite condition found during exploration, used
+  as-is without further tuning. `rho_A_AB`: mean 0.458, **std 0.41, range
+  [-0.42, 0.91]** — huge seed-to-seed variance, sometimes structure survives
+  strongly, sometimes it's destroyed or even anti-correlated. `frac_remaining`:
+  mean 0.088, std 0.056. **Spearman(rho_A, frac_remaining) = 0.93,
+  p<0.0001** — under real parameter pressure, structure and function become
+  *strongly, positively coupled*: whichever seeds lose causal mediation also
+  lose geometric alignment, and by similar amounts. C1 vs C3 differs hugely
+  on both axes (Mann-Whitney p=6.8e-08 for both).
+
+### What this actually shows
+
+**No evidence, anywhere searched, of a genuine fossil regime** (structure
+selectively surviving while function is selectively erased). Instead:
+
+1. **Under ordinary training (no parameter pressure), structure and function
+   are essentially decoupled and both saturated**: `rho_A` sits in a very
+   narrow high band (~0.98-0.99) almost regardless of capacity, while
+   `frac_remaining` varies more but stays consistently well above 1 (the old
+   mechanism remains fully causally active — Hypothesis B, latent
+   persistence — reliably, not just as a single-seed fluke).
+2. **Capacity scarcity alone (a tight bottleneck) does not induce
+   fossilization** — if anything it very slightly strengthens latent
+   persistence rather than weakening it.
+3. **Real parameter pressure (weight decay) does erase the old mechanism**,
+   but it does so by degrading structure and function *together*, in a
+   strongly seed-dependent, strongly correlated way — not by selectively
+   preserving geometry while killing causal relevance. This rules out the
+   "structure survives, function dies" fossil hypothesis as the mechanism
+   at work here, and instead supports a much more mundane picture: what
+   looks like erasure under pressure is closer to *ordinary representational
+   decay*, just decay that is unusually variable across random seeds at this
+   particular boundary of decay strength.
+
+### The paper-worthy question this leaves
+
+Not "does a fossil exist" (no evidence for one in this task family) but:
+**when does behavioral override (Hypothesis B: old mechanism intact,
+outvoted) transition into correlated structure-function erosion (as in C3),
+and why is that transition so seed-variable?** The C1→C3 comparison is a
+clean, statistically solid empirical anchor for that question (both
+Mann-Whitney tests p<1e-7), and the C3 internal Spearman correlation
+(rho_A vs frac_remaining = 0.93) is itself a striking, reportable finding:
+under parameter pressure, a network's geometric and causal traces of a
+forgotten binding do not dissociate — they decay together, tightly coupled,
+but unpredictably in magnitude across otherwise-identical training runs.
+
+Raw data: `results/factorial_C1.json`, `results/factorial_C2.json`,
+`results/factorial_C3_batch1.json` + `factorial_C3_batch2.json`,
+`results/factorial_v1_summary.json`.
