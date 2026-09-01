@@ -1,0 +1,185 @@
+{
+  "tiny_mlp": [
+    {
+      "run_name": "tiny_mlp_seed1234",
+      "seed": 1234,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 6.3615193367004395,
+      "dissociation": true
+    },
+    {
+      "run_name": "tiny_mlp_seed1235",
+      "seed": 1235,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 12.927469968795776,
+      "dissociation": true
+    },
+    {
+      "run_name": "tiny_mlp_seed1236",
+      "seed": 1236,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 14.296341896057129,
+      "dissociation": true
+    },
+    {
+      "run_name": "tiny_mlp_seed1237",
+      "seed": 1237,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 7.20297384262085,
+      "dissociation": true
+    },
+    {
+      "run_name": "tiny_mlp_seed1238",
+      "seed": 1238,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 10.27942568063736,
+      "dissociation": true
+    },
+    {
+      "run_name": "tiny_mlp_seed1239",
+      "seed": 1239,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 10.089887619018555,
+      "dissociation": true
+    },
+    {
+      "run_name": "tiny_mlp_seed1240",
+      "seed": 1240,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 6.396049976348877,
+      "dissociation": true
+    }
+  ],
+  "small_transformer": [
+    {
+      "run_name": "small_transformer_seed1234",
+      "seed": 1234,
+      "status": "FAILED_PHASE_A",
+      "acc_A": 0.9615384340286255
+    },
+    {
+      "run_name": "small_transformer_seed1235",
+      "seed": 1235,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 0.48734426498413086,
+      "dissociation": false
+    },
+    {
+      "run_name": "small_transformer_seed1236",
+      "seed": 1236,
+      "status": "FAILED_PHASE_A",
+      "acc_A": 0.9230769276618958
+    },
+    {
+      "run_name": "small_transformer_seed1237",
+      "seed": 1237,
+      "status": "FAILED_PHASE_A",
+      "acc_A": 0.9230769276618958
+    },
+    {
+      "run_name": "small_transformer_seed1238",
+      "seed": 1238,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 12.09513008594513,
+      "dissociation": true
+    },
+    {
+      "run_name": "small_transformer_seed1239",
+      "seed": 1239,
+      "status": "FAILED_PHASE_A",
+      "acc_A": 0.9038461446762085
+    },
+    {
+      "run_name": "small_transformer_seed1240",
+      "seed": 1240,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 10.272992581129074,
+      "dissociation": true
+    }
+  ],
+  "larger_mlp": [
+    {
+      "run_name": "larger_mlp_seed1234",
+      "seed": 1234,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 7.899623870849609,
+      "dissociation": true
+    },
+    {
+      "run_name": "larger_mlp_seed1235",
+      "seed": 1235,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 13.96630334854126,
+      "dissociation": true
+    },
+    {
+      "run_name": "larger_mlp_seed1236",
+      "seed": 1236,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 11.985865354537964,
+      "dissociation": true
+    },
+    {
+      "run_name": "larger_mlp_seed1237",
+      "seed": 1237,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 14.29272747039795,
+      "dissociation": true
+    },
+    {
+      "run_name": "larger_mlp_seed1238",
+      "seed": 1238,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 11.786259889602661,
+      "dissociation": true
+    },
+    {
+      "run_name": "larger_mlp_seed1239",
+      "seed": 1239,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 9.387548208236694,
+      "dissociation": true
+    },
+    {
+      "run_name": "larger_mlp_seed1240",
+      "seed": 1240,
+      "status": "OK",
+      "acc_A": 1.0,
+      "t_flip": 30,
+      "final_C_A": 8.901776671409607,
+      "dissociation": true
+    }
+  ]
+}

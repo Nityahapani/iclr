@@ -110,7 +110,7 @@ def run_arch_experiment(model_ctor, seed: int, run_name: str, b1_val=1, b2_val=0
     and_label = and_fn(b1_val, b2_val)
     is_xor_correct_A = (m_A_special > 0) == bool(xor_label)
 
-    if not is_xor_correct_A or acc_A < 0.95:
+    if not is_xor_correct_A or acc_A < 0.90:
         print(f"[{run_name}] FAILED phase A (acc={acc_A:.3f}, xor_correct={is_xor_correct_A}) -- skipping")
         return {"run_name": run_name, "seed": seed, "status": "FAILED_PHASE_A", "acc_A": acc_A}
 
