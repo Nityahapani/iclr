@@ -257,3 +257,56 @@ point, per the concern about researcher degrees of freedom raised during
 this project. Any future work on the source of the C3 variance should
 preregister its hypothesis and quantity before looking at outcomes, as done
 here.
+
+---
+
+## Seed-level replication of the additive/interaction result (unit of analysis = seed)
+
+The R^2=0.999 additive-model result and the Gamma_AB/collapse-asymmetry test
+were originally reported on checkpoint-level statistics (thousands of
+temporally-correlated observations per seed), which inflates apparent
+significance. Per reviewer correction, we re-ran the same frozen task/config
+(no new hyperparameters, no new architecture) across multiple seeds and
+aggregated **at the seed level** (one summary number per seed, n=7 for C1,
+n=5 for C3).
+
+**C1 (ordinary training) replicates tightly and robustly:**
+- `R^2_additive` = 0.9993 ± 0.0004 across 7 seeds (range [0.9987, 1.0000]) --
+  the spectacular fit is a genuine, stable property of this condition, not a
+  seed-1234 fluke.
+- `Delta_R^2` (interaction improvement) ~0 in all 7 seeds -- no evidence the
+  interaction term helps, consistently.
+- The small collapse asymmetry (`ratio_A > ratio_B`) holds in **7/7 seeds**,
+  with consistent sign -- small in magnitude but directionally real and
+  reproducible, unlike the earlier `wd=0.12` false positive.
+
+**C3 (weight decay) does NOT replicate reliably -- this is itself the finding:**
+- `R^2_additive` ranges from 0.73 to 0.99 across just 5 seeds (std=0.106).
+  The near-perfect additive fit reported for seed 1234 was not representative;
+  under real parameter pressure the additive model's fit quality is itself
+  unstable across seeds, consistent with the previously-documented erratic
+  erosion (rho_A ranging -0.42 to 0.91 at fixed config).
+- `Delta_R^2` is correspondingly unstable, including one seed where the
+  interaction model badly overfits out-of-sample (-0.50).
+- Verdicts: 4/5 seeds show asymmetric collapse, 1/5 (seed 1234, the one
+  originally reported) shows symmetric collapse. **The single-seed
+  "symmetric collapse" verdict for C3 was not representative of the
+  condition and should not be generalized.**
+
+### Final locked claim
+
+*Under ordinary training, behavioral updating is well and robustly explained
+by an additive combination of the old and new mechanisms' independently-
+measured causal contributions (R^2≈0.999, stable across seeds), with no
+evidence that their combination requires a nonlinear interaction term
+(ΔR^2≈0) or strong directional gating (small, seed-consistent asymmetry,
+not a large effect). Under weight-decay-induced erosion, this same additive
+account becomes much less reliable and highly seed-dependent -- consistent
+with the earlier finding that weight decay's effect on the old mechanism is
+itself erratic across random seeds rather than following a single
+predictable pattern.* This is the paper's mechanistic core, and it is now
+based on seed-level replication rather than a single spectacular trajectory.
+
+Raw data: `results/full_interaction_test_C1_seed*.json`,
+`results/full_interaction_test_C3_seed*.json`,
+`results/seed_level_replication_summary.json`.
