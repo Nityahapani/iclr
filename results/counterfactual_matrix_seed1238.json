@@ -1,0 +1,44 @@
+{
+  "run_name": "seed1238",
+  "seed": 1238,
+  "matched_kl": 8.774310117587447e-05,
+  "matrix_AB": {
+    "none": {
+      "margin": 8.503491401672363,
+      "pred": "blue"
+    },
+    "A_removed": {
+      "margin": 1.5340018272399902,
+      "pred": "blue"
+    },
+    "B_removed": {
+      "margin": 0.368579626083374,
+      "pred": "blue"
+    },
+    "AB_removed": {
+      "margin": -6.60090970993042,
+      "pred": "red"
+    }
+  },
+  "matrix_B": {
+    "none": {
+      "margin": 12.12579345703125,
+      "pred": "blue"
+    },
+    "A_removed": {
+      "margin": 11.930493354797363,
+      "pred": "blue"
+    },
+    "B_removed": {
+      "margin": 0.23623895645141602,
+      "pred": "blue"
+    },
+    "AB_removed": {
+      "margin": 0.0409388542175293,
+      "pred": "blue"
+    }
+  },
+  "AB_B_removed_is_A": false,
+  "B_B_removed_is_A": false,
+  "coexistence_demonstrated": false
+}

@@ -1,0 +1,34 @@
+{
+  "n_coexist": 1,
+  "n_total": 7,
+  "per_seed": [
+    {
+      "seed": 1234,
+      "coexistence": false
+    },
+    {
+      "seed": 1235,
+      "coexistence": false
+    },
+    {
+      "seed": 1236,
+      "coexistence": false
+    },
+    {
+      "seed": 1237,
+      "coexistence": false
+    },
+    {
+      "seed": 1238,
+      "coexistence": false
+    },
+    {
+      "seed": 1239,
+      "coexistence": true
+    },
+    {
+      "seed": 1240,
+      "coexistence": false
+    }
+  ]
+}
