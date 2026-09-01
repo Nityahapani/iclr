@@ -310,3 +310,64 @@ based on seed-level replication rather than a single spectacular trajectory.
 Raw data: `results/full_interaction_test_C1_seed*.json`,
 `results/full_interaction_test_C3_seed*.json`,
 `results/seed_level_replication_summary.json`.
+
+---
+
+## FINAL HEADLINE RESULT: leave-one-seed-out generalization (C1 only)
+
+Per reviewer decision, **C3 (weight decay) is dropped from the paper's
+headline claim** -- it remains documented above as a real but unstable
+secondary finding (seed-dependent erosion), kept separate so it doesn't
+dilute the much cleaner ordinary-training result.
+
+**The headline result, validated at the correct unit of analysis (seed, not
+checkpoint), with true cross-model generalization:**
+
+For each of 7 seeds, fit `m(t) ≈ slope * (C_A(t) + C_B(t)) + intercept` using
+only the pooled checkpoints from the OTHER 6 seeds, freeze those two
+numbers, then predict the ENTIRE trajectory of the held-out seed (a model
+never touched during fitting).
+
+**LOSO-R² = 0.980 ± 0.028 (min 0.913, max 0.999) across all 7 seeds.**
+
+The fitted slope (~0.49-0.50) and intercept are remarkably stable across
+every leave-one-out fit -- this is not seven separate curve-fits that
+happen to each work; it is one fixed linear relationship that predicts
+unseen models' entire behavioral trajectories from two independently
+measured causal interventions.
+
+**Negative control**: predicting `m(t)` from `C_r(t)` (a matched-norm random
+direction) instead of `C_A(t)+C_B(t)`, same checkpoint train/test split. This
+was NOT a clean R²≈0 story -- reported honestly: mean R²=0.166, std=0.541,
+with one seed spuriously high (0.953) due to an outlier-noisy `C_r` trajectory
+in that particular run happening to align with `m(t)`'s trend by chance. The
+random control is far less stable and far less predictive than the causal
+predictor, and critically does NOT generalize across seeds with a single
+fixed relationship the way the causal predictor does -- but individual-seed
+R² for the random control should not be read as a clean zero.
+
+### The complete, locked paper contribution
+
+1. **Observation**: behavior flips rapidly (within ~10 steps of B-training).
+2. **Causal discovery**: the old mechanism (A) remains fully causally active
+   long after behavior has reversed -- a specific, validated intervention
+   (matched-norm random-direction control included) demonstrates this is not
+   generic perturbation sensitivity.
+3. **Quantitative theory**: the behavioral margin is almost completely
+   explained by an additive combination of the old and new mechanisms'
+   independently-measured causal contributions (R²≈0.999 in-sample-model,
+   replicated across 7 seeds at 0.9993±0.0004). An interaction term adds
+   essentially nothing (ΔR²≈0, consistent across seeds). A small, seed-
+   consistent (7/7) collapse asymmetry exists but is modest in magnitude --
+   not evidence for strong directional gating.
+4. **Generalization**: the SAME fixed linear relationship (fit once, on 6
+   seeds) predicts an entirely unseen 7th seed's full trajectory with
+   LOSO-R²=0.98±0.03. This is the paper's strongest and most defensible claim.
+
+Locked title: **Behavioral Forgetting Without Mechanistic Erasure** --
+behavioral reversal does not imply causal erasure of the old mechanism;
+instead, behavior is a predictable, generalizable linear function of the
+independently-measured causal contributions of old and new mechanisms.
+
+Raw data: `results/loso_and_negative_control.json`,
+`results/full_interaction_test_C1_seed*.json`.
