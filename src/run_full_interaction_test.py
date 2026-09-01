@@ -30,7 +30,8 @@ from src.task import (make_filler_mapping, PhaseDataset, OBJ2ID, CTX2ID, COLOR2I
                        SPECIAL_OBJECT, VOCAB_SIZE, NUM_CLASSES, CONTEXT_VOCAB_SIZE)
 from src.model import TinyClassifier
 from src.train import train_phase
-from src.probe import jacobian_zor_red_vs_blue, find_B_mechanism_direction, gamma_AB_interaction
+from src.probe import (jacobian_zor_red_vs_blue, find_B_mechanism_direction, gamma_AB_interaction,
+                        calibrated_random_direction, causal_mediation_effect)
 
 
 def new_model(bottleneck_dim=None, hidden_dim=32, embed_dim=16, ctx_embed_dim=8):
@@ -71,6 +72,7 @@ def run_full_test(config: dict, seed: int, run_name: str):
     train_phase(model_A, ds_A, steps=phase_A_steps, batch_size=batch_size,
                 lr=phase_A_lr, seed=seed, eval_every=phase_A_steps)
     J_A = jacobian_zor_red_vs_blue(model_A, ctx_name="CTX_RED")
+    v_rand_fixed = calibrated_random_direction(J_A, seed=seed + 999)
 
     theta_A_state = copy.deepcopy(model_A.state_dict())
     model_AB = new_model(bottleneck_dim=bottleneck_dim, hidden_dim=hidden_dim)
@@ -92,9 +94,24 @@ def run_full_test(config: dict, seed: int, run_name: str):
         if step % eval_every == 0 or step == phase_B_steps - 1:
             J_B_t = find_B_mechanism_direction(model_AB, ctx_name="CTX_RED")
             gr = gamma_AB_interaction(model_AB, J_A, J_B_t, SPECIAL_OBJECT)
+
+            # random-direction control: same single-ablation methodology as
+            # C_A, applied to the fixed matched-norm random direction instead
+            zor_id_t = torch.tensor([OBJ2ID[SPECIAL_OBJECT]], dtype=torch.long)
+            ctx_red_t = torch.tensor([CTX2ID["CTX_RED"]], dtype=torch.long)
+            with torch.no_grad():
+                h_t = model_AB.hidden(zor_id_t, ctx_red_t).squeeze(0)
+                logits_normal_t = model_AB.fc2(h_t.unsqueeze(0))
+                m_normal_t = (logits_normal_t[0, COLOR2ID["blue"]] - logits_normal_t[0, COLOR2ID["red"]]).item()
+                coeff_r = (v_rand_fixed @ h_t) / ((v_rand_fixed @ v_rand_fixed) + 1e-9)
+                h_r = h_t - coeff_r * v_rand_fixed
+                logits_r = model_AB.fc2(h_r.unsqueeze(0))
+                m_r = (logits_r[0, COLOR2ID["blue"]] - logits_r[0, COLOR2ID["red"]]).item()
+            C_r_t = m_r - m_normal_t
+
             trajectory.append({
                 "step": step, "m": gr["m_h"],
-                "C_A": gr["C_A"], "C_B": gr["C_B"],
+                "C_A": gr["C_A"], "C_B": gr["C_B"], "C_r": C_r_t,
                 "C_B_given_A": gr["C_B_given_A"], "C_A_given_B": gr["C_A_given_B"],
                 "Gamma_AB": gr["Gamma_AB"], "Gamma_BA": gr["Gamma_BA"],
             })
