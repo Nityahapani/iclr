@@ -1,0 +1,93 @@
+[
+  {
+    "seed": 1234,
+    "C_A": -10.938138484954834,
+    "C_R_matched": -5.576171398162842,
+    "matched_effect_gap": 5.361967086791992,
+    "perturbation_norm_A": 2.6351237297058105,
+    "pre_filler_acc": 1.0,
+    "post_filler_acc_IA": 0.4375,
+    "post_filler_acc_IR": 1.0,
+    "delta_filler_IA": 0.5625,
+    "delta_filler_IR": 0.0,
+    "specificity_confirmed": false
+  },
+  {
+    "seed": 1235,
+    "C_A": -10.330837488174438,
+    "C_R_matched": -4.867179870605469,
+    "matched_effect_gap": 5.46365761756897,
+    "perturbation_norm_A": 2.5377471446990967,
+    "pre_filler_acc": 1.0,
+    "post_filler_acc_IA": 0.9375,
+    "post_filler_acc_IR": 1.0,
+    "delta_filler_IA": 0.0625,
+    "delta_filler_IR": 0.0,
+    "specificity_confirmed": false
+  },
+  {
+    "seed": 1236,
+    "C_A": -9.37191915512085,
+    "C_R_matched": -4.653314590454102,
+    "matched_effect_gap": 4.718604564666748,
+    "perturbation_norm_A": 2.323422908782959,
+    "pre_filler_acc": 1.0,
+    "post_filler_acc_IA": 1.0,
+    "post_filler_acc_IR": 1.0,
+    "delta_filler_IA": 0.0,
+    "delta_filler_IR": 0.0,
+    "specificity_confirmed": false
+  },
+  {
+    "seed": 1237,
+    "C_A": -10.12905240058899,
+    "C_R_matched": -5.593375205993652,
+    "matched_effect_gap": 4.535677194595337,
+    "perturbation_norm_A": 2.591599225997925,
+    "pre_filler_acc": 1.0,
+    "post_filler_acc_IA": 1.0,
+    "post_filler_acc_IR": 1.0,
+    "delta_filler_IA": 0.0,
+    "delta_filler_IR": 0.0,
+    "specificity_confirmed": false
+  },
+  {
+    "seed": 1238,
+    "C_A": -9.317352771759033,
+    "C_R_matched": -5.543900012969971,
+    "matched_effect_gap": 3.7734527587890625,
+    "perturbation_norm_A": 2.4878485202789307,
+    "pre_filler_acc": 1.0,
+    "post_filler_acc_IA": 0.875,
+    "post_filler_acc_IR": 1.0,
+    "delta_filler_IA": 0.125,
+    "delta_filler_IR": 0.0,
+    "specificity_confirmed": false
+  },
+  {
+    "seed": 1239,
+    "C_A": -10.734971523284912,
+    "C_R_matched": -5.668176651000977,
+    "matched_effect_gap": 5.0667948722839355,
+    "perturbation_norm_A": 2.5806939601898193,
+    "pre_filler_acc": 1.0,
+    "post_filler_acc_IA": 0.6875,
+    "post_filler_acc_IR": 1.0,
+    "delta_filler_IA": 0.3125,
+    "delta_filler_IR": 0.0,
+    "specificity_confirmed": false
+  },
+  {
+    "seed": 1240,
+    "C_A": -10.02799105644226,
+    "C_R_matched": -4.981152534484863,
+    "matched_effect_gap": 5.0468385219573975,
+    "perturbation_norm_A": 2.7695465087890625,
+    "pre_filler_acc": 1.0,
+    "post_filler_acc_IA": 0.875,
+    "post_filler_acc_IR": 1.0,
+    "delta_filler_IA": 0.125,
+    "delta_filler_IR": 0.0,
+    "specificity_confirmed": false
+  }
+]

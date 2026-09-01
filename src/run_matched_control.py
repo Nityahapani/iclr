@@ -70,11 +70,21 @@ def run_matched_control_test(seed: int, checkpoint_step_fraction: float = 1.0):
         pre_filler_logits = model_AB(filler_ids, filler_ctx)
         pre_filler_acc = (pre_filler_logits.argmax(-1) == filler_labels).float().mean().item()
 
-    logits_IA_filler = ablate_along_J(model_AB, filler_ids, filler_ctx, J_A, alpha=1.0)
-    post_filler_acc_IA = (logits_IA_filler.argmax(-1) == filler_labels).float().mean().item()
+    # ablate_along_J is single-example; loop over fillers individually
+    def batch_ablate_predict(v):
+        preds = []
+        for i in range(len(filler_ids)):
+            oid = filler_ids[i:i+1]
+            cid = filler_ctx[i:i+1]
+            logits = ablate_along_J(model_AB, oid, cid, v, alpha=1.0)
+            preds.append(logits.argmax(-1).item())
+        return torch.tensor(preds)
 
-    logits_IR_filler = ablate_along_J(model_AB, filler_ids, filler_ctx, v_R, alpha=1.0)
-    post_filler_acc_IR = (logits_IR_filler.argmax(-1) == filler_labels).float().mean().item()
+    preds_IA = batch_ablate_predict(J_A)
+    post_filler_acc_IA = (preds_IA == filler_labels).float().mean().item()
+
+    preds_IR = batch_ablate_predict(v_R)
+    post_filler_acc_IR = (preds_IR == filler_labels).float().mean().item()
 
     delta_filler_IA = abs(pre_filler_acc - post_filler_acc_IA)
     delta_filler_IR = abs(pre_filler_acc - post_filler_acc_IR)
