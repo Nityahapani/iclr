@@ -371,3 +371,74 @@ independently-measured causal contributions of old and new mechanisms.
 
 Raw data: `results/loso_and_negative_control.json`,
 `results/full_interaction_test_C1_seed*.json`.
+
+---
+
+## Exact permutation null (replaces the noisy random-direction control)
+
+The random-direction control was noisy and occasionally spuriously high in
+individual seeds (see above). Per reviewer suggestion, replaced with a
+harder, seed-level test: a **model-level permutation null**. Rather than
+asking whether a single scalar control predicts `m(t)`, we ask whether the
+*correct pairing* of causal trajectory to behavioral trajectory (same seed
+to same seed) explains far more variance than *any mismatched pairing*
+(seed s's behavior modeled using a different seed's causal trajectory),
+under the exact same LOSO fitting procedure. This preserves all temporal
+autocorrelation within each trajectory — every permutation still uses real,
+smooth, autocorrelated trajectories from real trained models; only the
+seed-to-seed assignment is scrambled.
+
+Computed **exhaustively** over all 1854 derangements of 7 seeds (every seed
+mismatched simultaneously, not sampled):
+
+- **Observed LOSO-R² = 0.980**
+- **Null distribution**: mean=0.213, std=0.195, min=-0.075, max=0.942,
+  99th percentile=0.733
+- **0 of 1854 derangements matched or exceeded the observed value**
+  (exact permutation p < 1/1854 ≈ 0.00054)
+
+The correct pairing explains variance far beyond what any mismatched
+pairing achieves, ruling out that the R²=0.98 result is a generic artifact
+of trajectory smoothness or autocorrelation rather than evidence of a real,
+seed-specific causal-to-behavioral relationship.
+
+Raw data: `results/permutation_null.json`.
+
+## LOCKED PAPER STRUCTURE (experimentation complete)
+
+**Title: "Behavioral Forgetting Does Not Necessarily Erase the Causal
+Mechanism"** (revised from an earlier universal-sounding title — the correct
+claim is non-necessity, not universal preservation; the C3 result is what
+makes "necessarily" the operative word rather than a hedge).
+
+**Thesis: behavioral forgetting and mechanistic erasure are dissociable
+phenomena.**
+
+1. **The puzzle.** A model learns `zor→red` (phase A), then learns
+   `zor→blue` (phase B). Behavior says A was forgotten.
+2. **The causal test.** Directly intervene on the A-associated causal
+   pathway (frozen `J_A`, established and causally verified at θ_A).
+   Result: behavior flips while the intervention's effect (`C_A`) remains
+   large — behavioral forgetting ≠ causal erasure, under ordinary training.
+3. **The quantitative result (centerpiece).** `m(t) ≈ β₀ + β_A·C_A(t) +
+   β_B·C_B(t)`, coefficients fit once and frozen, tested via leave-one-
+   seed-out: **LOSO-R² = 0.980 ± 0.028** (min 0.913) across 7 seeds,
+   validated against an exact permutation null (p < 0.00054). The
+   behavioral trajectory of an unseen model is predictable from the causal
+   contributions of its competing learned pathways.
+4. **Interaction analysis.** The nonlinear interaction term does not
+   improve out-of-sample prediction (ΔR²≈0, consistent across seeds). A
+   small, seed-consistent (7/7) collapse asymmetry exists but is modest —
+   the evidence favors a largely decomposable/additive causal account
+   under ordinary training, not strong directional gating.
+5. **Boundary condition (limitations / secondary result).** Under weight
+   decay, this same account becomes far less stable: R²_additive ranges
+   0.73–0.99 across seeds, and genuine causal erosion of the old mechanism
+   can occur — but its extent is highly seed-dependent rather than following
+   a single predictable pattern. This is what makes the paper's central
+   claim about *non-necessity* rather than universal mechanism preservation:
+   mechanistic erasure is possible, just not the default outcome of
+   ordinary behavioral override.
+
+**Status: experimentation is complete.** No further architectures, tasks,
+regularizers, or mechanism-discovery metrics are planned before drafting.
