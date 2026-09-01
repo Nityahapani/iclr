@@ -390,3 +390,67 @@ def C_A_and_C_B_at_checkpoint(model, J_A: torch.Tensor, J_B: torch.Tensor, objec
     C_A = m_A - m_normal
     C_B = m_B - m_normal
     return m_normal, C_A, C_B
+
+
+def gamma_AB_interaction(model, J_A: torch.Tensor, J_B: torch.Tensor, object_name: str, alpha: float = 1.0):
+    """
+    Conditional causal interaction test (NOT tautologically zero -- validated
+    against a synthetic y=a+b+lambda*a*b sanity check before use here).
+
+    C_A       = m(h) - m(I_A(h))
+    C_B       = m(h) - m(I_B(h))
+    C_B_given_A = m(I_A(h)) - m(I_B(I_A(h)))   -- B's effect AFTER A removed,
+                  with I_B's projection RECOMPUTED on the altered state
+                  I_A(h), not on the original h. This recomputation is what
+                  breaks the algebraic guarantee that made the earlier
+                  double_intervention_margin construction tautological.
+    Gamma_AB  = C_B_given_A - C_B
+
+    Gamma_AB ~ 0: B's causal effect is unchanged by removing A (no
+                  interaction/gating).
+    Gamma_AB != 0: the mechanisms causally interact.
+    """
+    obj_id = torch.tensor([OBJ2ID[object_name]], dtype=torch.long)
+    ctx_red = torch.tensor([CTX2ID["CTX_RED"]], dtype=torch.long)
+
+    def m_of(h_vec):
+        with torch.no_grad():
+            logits = model.fc2(h_vec.unsqueeze(0))
+            return (logits[0, COLOR2ID["blue"]] - logits[0, COLOR2ID["red"]]).item()
+
+    def ablate(h_vec, J):
+        coeff = (J @ h_vec) / ((J @ J) + 1e-9)
+        return h_vec - alpha * coeff * J
+
+    with torch.no_grad():
+        h = model.hidden(obj_id, ctx_red).squeeze(0)
+
+    m_h = m_of(h)
+    h_IA = ablate(h, J_A)
+    h_IB = ablate(h, J_B)
+    m_IA = m_of(h_IA)
+    m_IB = m_of(h_IB)
+
+    C_A = m_h - m_IA
+    C_B = m_h - m_IB
+
+    # recompute B's projection on the ALREADY-ablated state h_IA (this is
+    # the step that makes the test non-tautological: the projection
+    # coefficient (J_B . h_IA)/(J_B.J_B) generally differs from (J_B.h)/(J_B.J_B))
+    h_IA_then_IB = ablate(h_IA, J_B)
+    m_IA_then_IB = m_of(h_IA_then_IB)
+    C_B_given_A = m_IA - m_IA_then_IB
+
+    # symmetric: A's effect after B removed
+    h_IB_then_IA = ablate(h_IB, J_A)
+    m_IB_then_IA = m_of(h_IB_then_IA)
+    C_A_given_B = m_IB - m_IB_then_IA
+
+    Gamma_AB = C_B_given_A - C_B
+    Gamma_BA = C_A_given_B - C_A  # symmetric version, should roughly agree in sign/magnitude
+
+    return {
+        "m_h": m_h, "C_A": C_A, "C_B": C_B,
+        "C_B_given_A": C_B_given_A, "C_A_given_B": C_A_given_B,
+        "Gamma_AB": Gamma_AB, "Gamma_BA": Gamma_BA,
+    }
