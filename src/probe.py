@@ -303,3 +303,56 @@ def measure_Q_A_isolation(model_at_theta_A, J_A: torch.Tensor, filler_mapping, n
     cos_sq = [cosine_alignment(J_A, J_f) ** 2 for J_f in other_jacobians]
     Q_A = 1.0 - float(np.mean(cos_sq))
     return Q_A, cos_sq
+
+
+def calibrated_random_direction(J_A: torch.Tensor, seed: int) -> torch.Tensor:
+    """
+    A random direction in the same hidden space as J_A, matched to produce
+    the SAME norm when used in ablate_along_J (i.e. same ||J||, so the
+    projection-and-subtract intervention displaces the hidden state by a
+    comparable amount). Since ablate_along_J's displacement magnitude scales
+    with ||J|| (via the projection coefficient's denominator), matching norm
+    directly gives a matched-displacement control direction, without needing
+    to calibrate against a specific h.
+    """
+    g = torch.Generator().manual_seed(seed)
+    r = torch.randn(J_A.shape[0], generator=g)
+    r = r / (r.norm() + 1e-9)
+    return r * J_A.norm()
+
+
+def find_B_mechanism_direction(model_T, ctx_name="CTX_RED"):
+    """
+    J_B: the model's OWN current causal gradient for the blue-vs-red margin
+    on zor, at theta_T. This is the analogous construction to J_A but taken
+    at the FINAL checkpoint rather than frozen from theta_A -- i.e. "the
+    mechanism currently responsible for the blue prediction," whatever it
+    turned out to be, defined the same principled way (grad_h of the
+    relevant margin) rather than guessed at architecturally.
+    """
+    zor_id = torch.tensor([OBJ2ID[SPECIAL_OBJECT]], dtype=torch.long)
+    ctx_id = torch.tensor([CTX2ID[ctx_name]], dtype=torch.long)
+    return jacobian_of_margin(model_T, zor_id, ctx_id, COLOR2ID["blue"], COLOR2ID["red"])
+
+
+def double_intervention_margin(model, obj_id, ctx_id, J_A, J_B, alpha=1.0,
+                                do_A=False, do_B=False):
+    """
+    Apply ablation along J_A and/or J_B (independently, each removing its own
+    component from the CURRENT hidden state h -- not sequentially re-deriving
+    the projection after the first ablation, so the two interventions are
+    genuine independent counterfactuals combined additively in hidden space),
+    then return the red-vs-blue logit margin.
+    """
+    with torch.no_grad():
+        h = model.hidden(obj_id, ctx_id).squeeze(0)
+        h_out = h.clone()
+        if do_A:
+            coeff_A = (J_A @ h) / ((J_A @ J_A) + 1e-9)
+            h_out = h_out - alpha * coeff_A * J_A
+        if do_B:
+            coeff_B = (J_B @ h) / ((J_B @ J_B) + 1e-9)
+            h_out = h_out - alpha * coeff_B * J_B
+        logits = model.fc2(h_out.unsqueeze(0))
+        margin = (logits[0, COLOR2ID["red"]] - logits[0, COLOR2ID["blue"]]).item()
+    return margin
