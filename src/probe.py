@@ -454,3 +454,76 @@ def gamma_AB_interaction(model, J_A: torch.Tensor, J_B: torch.Tensor, object_nam
         "C_B_given_A": C_B_given_A, "C_A_given_B": C_A_given_B,
         "Gamma_AB": Gamma_AB, "Gamma_BA": Gamma_BA,
     }
+
+
+def matched_random_intervention(model, obj_id, ctx_id, J_A: torch.Tensor,
+                                 target_output_margin_change: float = None,
+                                 n_candidates: int = 200, seed: int = 0):
+    """
+    Construct a random direction I_R matched to I_A (built from J_A) on THREE
+    criteria simultaneously, not just norm:
+      1. perturbation norm: ||h - I_R(h)|| == ||h - I_A(h)||
+      2. immediate output-margin change: the random direction is selected
+         (from n_candidates random directions of the correct norm) to have
+         |margin change| as close as possible to I_A's own margin change --
+         i.e. matched in EFFECT SIZE on THIS example, not just in norm.
+      3. same layer / same number of modified units: both interventions act
+         on the full hidden vector via the same single-projection-removal
+         mechanism (ablate_along_J), so this is automatically matched.
+    This directly addresses "maybe the intervention just deletes a
+    convenient large direction" -- I_R is picked to produce a comparable
+    immediate perturbation to the specific example being tested, so any
+    remaining gap between I_A and I_R's downstream effects (on OTHER
+    behaviors, e.g. task B, or unrelated fillers) isn't explained by naive
+    perturbation-size differences.
+    """
+    with torch.no_grad():
+        h = model.hidden(obj_id, ctx_id).squeeze(0)
+        logits_normal = model.fc2(h.unsqueeze(0))
+        m_normal = (logits_normal[0, COLOR2ID["blue"]] - logits_normal[0, COLOR2ID["red"]]).item()
+
+        coeff_A = (J_A @ h) / ((J_A @ J_A) + 1e-9)
+        h_IA = h - coeff_A * J_A
+        logits_IA = model.fc2(h_IA.unsqueeze(0))
+        m_IA = (logits_IA[0, COLOR2ID["blue"]] - logits_IA[0, COLOR2ID["red"]]).item()
+        C_A_effect = m_IA - m_normal
+        perturbation_norm_A = (h - h_IA).norm().item()
+
+        # search over random directions for the closest EFFECT-SIZE match
+        # (not just norm match) at the SAME perturbation norm
+        g = torch.Generator().manual_seed(seed)
+        best_v = None
+        best_gap = float("inf")
+        best_C_R = None
+        for _ in range(n_candidates):
+            v = torch.randn(h.shape[0], generator=g)
+            v = v / (v.norm() + 1e-9)
+            # scale v so that removing its FULL self (not a projection) gives
+            # the same perturbation norm as I_A -- here we mimic ablate_along_J's
+            # geometry: h' = h - alpha*(v.h/v.v)*v, so we search over v's
+            # direction (fixed unit norm) and rely on h's own projection onto v
+            # to determine displacement, THEN rescale v post-hoc so displacement
+            # norm matches exactly.
+            coeff_v = (v @ h) / ((v @ v) + 1e-9)
+            h_Iv_raw = h - coeff_v * v
+            raw_disp_norm = (h - h_Iv_raw).norm().item()
+            if raw_disp_norm < 1e-9:
+                continue
+            # rescale the projection so displacement norm exactly equals perturbation_norm_A
+            scale = perturbation_norm_A / raw_disp_norm
+            h_Iv = h - scale * coeff_v * v
+            logits_Iv = model.fc2(h_Iv.unsqueeze(0))
+            m_Iv = (logits_Iv[0, COLOR2ID["blue"]] - logits_Iv[0, COLOR2ID["red"]]).item()
+            C_v = m_Iv - m_normal
+            gap = abs(abs(C_v) - abs(C_A_effect))
+            if gap < best_gap:
+                best_gap = gap
+                best_v = v
+                best_C_R = C_v
+
+    return {
+        "m_normal": m_normal, "m_IA": m_IA, "C_A": C_A_effect,
+        "perturbation_norm_A": perturbation_norm_A,
+        "C_R_matched": best_C_R, "matched_effect_gap": best_gap,
+        "v_R": best_v,
+    }
