@@ -356,3 +356,37 @@ def double_intervention_margin(model, obj_id, ctx_id, J_A, J_B, alpha=1.0,
         logits = model.fc2(h_out.unsqueeze(0))
         margin = (logits[0, COLOR2ID["red"]] - logits[0, COLOR2ID["blue"]]).item()
     return margin
+
+
+def C_A_and_C_B_at_checkpoint(model, J_A: torch.Tensor, J_B: torch.Tensor, object_name: str):
+    """
+    Independently measure C_A(t) and C_B(t) at a single checkpoint, using the
+    SAME single-ablation methodology as the decisive causal trajectory
+    experiment (blue-positive margin convention: m = logit_blue - logit_red).
+    C_A(t) = m_with_A_ablated - m_normal
+    C_B(t) = m_with_B_ablated - m_normal
+    Each is an INDEPENDENT single intervention (not combined), matching the
+    additive-model test which predicts m(t) from C_A(t)+C_B(t) separately
+    estimated.
+    """
+    obj_id = torch.tensor([OBJ2ID[object_name]], dtype=torch.long)
+    ctx_red = torch.tensor([CTX2ID["CTX_RED"]], dtype=torch.long)
+
+    with torch.no_grad():
+        h = model.hidden(obj_id, ctx_red).squeeze(0)
+        logits_normal = model.fc2(h.unsqueeze(0))
+        m_normal = (logits_normal[0, COLOR2ID["blue"]] - logits_normal[0, COLOR2ID["red"]]).item()
+
+        coeff_A = (J_A @ h) / ((J_A @ J_A) + 1e-9)
+        h_A = h - coeff_A * J_A
+        logits_A = model.fc2(h_A.unsqueeze(0))
+        m_A = (logits_A[0, COLOR2ID["blue"]] - logits_A[0, COLOR2ID["red"]]).item()
+
+        coeff_B = (J_B @ h) / ((J_B @ J_B) + 1e-9)
+        h_B = h - coeff_B * J_B
+        logits_B = model.fc2(h_B.unsqueeze(0))
+        m_B = (logits_B[0, COLOR2ID["blue"]] - logits_B[0, COLOR2ID["red"]]).item()
+
+    C_A = m_A - m_normal
+    C_B = m_B - m_normal
+    return m_normal, C_A, C_B
