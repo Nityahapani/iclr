@@ -473,3 +473,77 @@ collateral effect on unrelated behavior" (which does not hold uniformly
 across seeds/checkpoints).
 
 Raw data: `results/matched_control_test.json`.
+
+---
+
+## Reopened experimentation: three additional validations (Parts 1-3)
+
+Per reviewer request, three additional experiments were run after "locked"
+was initially declared, to strengthen generality and rigor of the core
+claim before drafting.
+
+### Part 1: novel task family (XOR -> AND)
+
+Replaced the color-relabeling task with a genuinely different computation:
+a marker token's boolean function over two input bits, switched from XOR
+(phase A) to AND (phase B) -- same input domain, different learned function,
+not a relabeled classification. Reused only the lightweight core test
+(t_flip, C_A(t) trajectory), no full archaeology apparatus.
+
+**Result: clean replication across all 7 seeds.** `t_flip` in [10,20] steps
+(near-instant behavioral reversal) while `C_A` at the final checkpoint
+(after 3000 B-training steps) remains substantial in every seed (range
+6.4-14.3, never near zero). The same dissociation holds on a fundamentally
+different computational task.
+
+### Part 2: architecture generalization
+
+Tested the same XOR->AND task across three architectures using only the
+binary dissociation test (t_flip early AND final |C_A|>1.0), same 7 seeds:
+
+- **Tiny MLP** (hidden_dim=32): 7/7 seeds show dissociation.
+- **Larger MLP** (hidden_dim=128, 4x capacity): 7/7 seeds show dissociation
+  -- scale within the MLP family does not change the phenomenon.
+- **Small transformer** (single self-attention layer, 3-token sequence):
+  genuine architectural limitation found first -- phase-A accuracy plateaus
+  around 0.96 regardless of learning rate or training length (diagnosed as
+  a real ceiling, not a bug). Of 6/7 seeds that adequately learned phase A,
+  **4/6 show clear dissociation, 2/6 show near-zero final `C_A`** (weak or
+  absent effect).
+
+**Honest summary, not smoothed over**: the phenomenon is robust and
+universal within the MLP family (14/14 seeds across two capacities) but
+measurably less reliable in the attention-based architecture tested (4/6
+successful seeds). Given the transformer's own phase-A learning is itself
+less reliable at this toy scale, this result is reported as suggestive of
+an architectural boundary condition, not definitive -- worth flagging as an
+open question for future work rather than claiming universality across
+architectures.
+
+### Part 3: rigorous matched-perturbation control
+
+See the dedicated section above. Summary: no random direction of matched
+displacement norm achieves anywhere close to `I_A`'s effect size (strong
+evidence for specificity), but `I_A` itself was found to have some
+collateral effect on unrelated (filler) behavior in several seeds at this
+particular checkpoint/filler-set combination (a genuine limitation, kept in
+the record rather than dropped).
+
+### Precise wording adopted for the paper (per reviewer guidance)
+
+- Say: *"behavioral reversal can occur while the causal contribution of the
+  original computation remains substantial"* -- not "the old mechanism
+  persists" (ties the claim to the specific intervention actually performed).
+- Do NOT say *"the network stores the old concept"* -- "concept" implies a
+  representational claim broader than what was operationally tested. The
+  causal object is specifically the A-associated computation as defined by
+  the ablation intervention, nothing more.
+- Formal distinction to state precisely in the paper: **behavioral
+  forgetting** is `m(t) - m(0) < 0` (sign change in the tracked margin);
+  **causal erasure** is `C_A(t) -> 0`. The paper's logical point: `m(t) < 0`
+  does not imply `C_A(t) = 0`.
+
+Raw data: `results/logic_task_seed*.json`, `results/arch_generalization.json`,
+`results/arch_transformer_rerun.json`, `results/matched_control_test.json`.
+
+**Status: all three reopened experiments complete.** Ready for drafting.
