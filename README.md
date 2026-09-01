@@ -442,3 +442,34 @@ phenomena.**
 
 **Status: experimentation is complete.** No further architectures, tasks,
 regularizers, or mechanism-discovery metrics are planned before drafting.
+
+---
+
+## Matched-perturbation control (honest results, both findings kept)
+
+Constructed random directions matched to `I_A` on displacement norm, searched
+over 200 candidates per seed for the closest achievable effect-size match,
+then compared both interventions on filler-object (unrelated) behavior.
+
+**Favorable finding**: no random direction of matched norm gets close to
+`I_A`'s effect size -- best achievable `|C_R|` across the search (mean 5.27)
+is only ~52% of `|C_A|` (mean 10.12), across 7 seeds x 200 candidates. This
+is strong evidence `J_A` is not merely a large perturbation but a
+disproportionately effective, structured direction.
+
+**Complicating finding, kept rather than dropped**: `I_A` itself is not
+perfectly surgical -- it flips filler-object predictions in several seeds
+when tested against this filler set at the final checkpoint (delta up to
+0.562), diverging from the cleaner specificity results reported earlier in
+this log (which used different filler subsets and/or checkpoints). Verified
+this is a real effect, not a code bug (`I_R`'s apparent zero filler-effect
+was checked and confirmed to be a genuine perturbation that simply isn't
+large enough to flip fillers' high-confidence predictions, not a
+non-effect). **Limitation to carry into the paper**: `I_A` is best described
+as a large, highly effective, and comparatively specific intervention, not
+a perfectly narrow one -- the specificity claim should be stated relative to
+matched-norm random directions (where it holds strongly), not as "zero
+collateral effect on unrelated behavior" (which does not hold uniformly
+across seeds/checkpoints).
+
+Raw data: `results/matched_control_test.json`.
