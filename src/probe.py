@@ -575,3 +575,53 @@ def activation_patch_from_theta_A(model_T, model_A, object_name: str, ctx_name: 
         "h_T_norm": h_T.norm().item(),
         "h_A_vs_h_T_cosine": cosine_alignment(h_A, h_T),
     }
+
+
+def interpolated_patch_margin(model_T, h_source: torch.Tensor, object_name: str,
+                               ctx_name: str = "CTX_RED", lambdas=None):
+    """
+    h(lambda) = (1-lambda)*h_AB + lambda*h_source, for a sweep of lambda in
+    [0,1]. Returns the red-vs-blue margin (blue-positive convention) at each
+    lambda, read out through model_T's CURRENT fc2 head. h_source can be
+    theta_A's own activation, a foreign theta_A's activation, a random
+    activation, or a component-decomposed activation -- this function is
+    agnostic to what h_source represents.
+    """
+    if lambdas is None:
+        lambdas = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+
+    obj_id = torch.tensor([OBJ2ID[object_name]], dtype=torch.long)
+    ctx_id = torch.tensor([CTX2ID[ctx_name]], dtype=torch.long)
+
+    with torch.no_grad():
+        h_AB = model_T.hidden(obj_id, ctx_id).squeeze(0)
+        curve = []
+        for lam in lambdas:
+            h_lam = (1 - lam) * h_AB + lam * h_source
+            logits = model_T.fc2(h_lam.unsqueeze(0))
+            margin = (logits[0, COLOR2ID["blue"]] - logits[0, COLOR2ID["red"]]).item()
+            curve.append({"lambda": lam, "margin": margin})
+    return curve
+
+
+def decompose_parallel_orthogonal(h: torch.Tensor, J_A: torch.Tensor):
+    """
+    h = h_parallel + h_perp, where h_parallel is h's component along J_A
+    (the FROZEN, theta_A-only-derived causal direction -- never refit on
+    M_AB) and h_perp is the remainder. J_A is NOT normalized on input; we
+    normalize internally for the projection.
+    """
+    J_unit = J_A / (J_A.norm() + 1e-9)
+    coeff = h @ J_unit
+    h_parallel = coeff * J_unit
+    h_perp = h - h_parallel
+    return h_parallel, h_perp
+
+
+def matched_random_activation(h_reference: torch.Tensor, seed: int) -> torch.Tensor:
+    """A random vector matched in norm to h_reference, used as the null
+    'random matched activation' patching target."""
+    g = torch.Generator().manual_seed(seed)
+    v = torch.randn(h_reference.shape[0], generator=g)
+    v = v / (v.norm() + 1e-9)
+    return v * h_reference.norm()
