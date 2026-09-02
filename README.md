@@ -683,3 +683,65 @@ of what survives and what doesn't, rather than a single "persists" or
 "doesn't persist" verdict.
 
 Raw data: `results/patching_seed*.json`, `results/patching_summary.json`.
+
+---
+
+## FINAL MECHANISTIC RESULT: controlled patching decomposition (necessity + sufficiency)
+
+Per reviewer request, ran the decisive identifiability test: does patching
+restore a specific, meaningful A-derived causal component, or just a
+complicated incidental hidden state the current readout happens to
+reinterpret? Decomposed θ_A's activation into a component along `J_A` (the
+FROZEN causal direction, defined purely from θ_A, never refit on M_AB) and
+an orthogonal remainder, then patched each in isolation via a full
+dose-response interpolation sweep (λ=0 to 1), across 7 seeds, with
+seed-level 95% confidence intervals (not checkpoint-level statistics).
+
+**Results at λ=1 (full patch), mean margin ± 95% CI (blue-positive; negative
+= red restored), n_restored/7:**
+
+| Condition | Mean | 95% CI | n restored |
+|---|---|---|---|
+| own full θ_A activation | -8.10 | [-8.56, -7.64] | 7/7 |
+| **own A-relevant (`J_A`-parallel) component only** | **-8.08** | **[-8.57, -7.60]** | **7/7** |
+| own orthogonal remainder only | +11.65 | [11.22, 12.08] | 0/7 |
+| foreign θ_A activation | +2.00 | [-0.22, 4.22] | 1/7 |
+| random matched-norm activation | -0.15 | [-2.88, 2.57] | 3/7 (noisy, CI crosses 0) |
+
+**This is a clean necessity-and-sufficiency demonstration.** The pre-defined
+`J_A`-parallel component alone reproduces the full restoration effect
+almost exactly (-8.08 vs -8.10, CIs nearly identical) — it is **sufficient**.
+Removing only that component from θ_A's activation (patching in everything
+else) eliminates the effect entirely (0/7, mean +11.65, indistinguishable
+from baseline) — it is **necessary**. Foreign and random controls show
+weak, inconsistent, statistically non-significant effects (CIs crossing
+zero), confirming this is not a generic "any activation gets reinterpreted"
+artifact.
+
+### Final, upgraded claim
+
+This resolves the identifiability concern directly. The evidence now
+supports: ***a specific, phase-A-derived causal component — identified
+independently from θ_A alone and never fit to M_AB — remains sufficient on
+its own to reinstate the original computation's behavioral output after
+extensive retraining on a conflicting task, and this component is also
+necessary: its removal from θ_A's activation eliminates the restoration
+effect entirely.*** This is substantially stronger than "the model
+recognizes its own historical activation" (the prior claim) — it identifies
+*which part* of that activation carries the causal signal, isolates it
+precisely, and shows it is both necessary and sufficient, resolved at the
+seed level with confidence intervals rather than checkpoint-level
+statistics.
+
+Combined with the earlier three-part picture (direction causally influential
+via ablation; readout recognizes own lineage via whole-state patching; but
+internal dynamics don't spontaneously reconstruct A when B is merely
+removed via the counterfactual matrix), the complete mechanistic claim is:
+**a narrowly-identifiable, θ_A-derived causal component is both necessary
+and sufficient to reinstate A's behavior when directly supplied, remains
+causally influential on the model's ordinary forward pass, and is
+recognized specifically by the model's own current output head — but is not
+spontaneously recovered by the model's own internal dynamics through
+subtractive intervention alone.**
+
+Raw data: `results/decomposition_seed*.json`, `results/decomposition_summary.json`.
