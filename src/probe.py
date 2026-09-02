@@ -527,3 +527,51 @@ def matched_random_intervention(model, obj_id, ctx_id, J_A: torch.Tensor,
         "C_R_matched": best_C_R, "matched_effect_gap": best_gap,
         "v_R": best_v,
     }
+
+
+def activation_patch_from_theta_A(model_T, model_A, object_name: str, ctx_name: str = "CTX_RED"):
+    """
+    Direct activation patching: replace M_T's hidden state for `object_name`
+    with theta_A's OWN hidden state for the same input, then read out M_T's
+    CURRENT fc2 readout on that patched activation. This is a stronger,
+    more direct test than J_A-ablation: rather than removing a single
+    derived direction, we substitute the entire hidden representation A
+    actually produced, and ask whether M_T's current output head still
+    reads it as "red" (i.e. whether the readout that now says "blue" would
+    say "red" given A's own literal activations).
+
+    If patching restores red -> the CURRENT readout is still compatible
+    with A's activations (necessary condition for "A computation, run
+    through, still available"). If patching does NOT restore red -> either
+    the readout itself has changed to no longer respond to A's activation
+    pattern, or A's own activation pattern for this input isn't the same
+    kind of signal the current model would produce if actually computing A.
+    """
+    obj_id = torch.tensor([OBJ2ID[object_name]], dtype=torch.long)
+    ctx_id = torch.tensor([CTX2ID[ctx_name]], dtype=torch.long)
+
+    with torch.no_grad():
+        h_A = model_A.hidden(obj_id, ctx_id).squeeze(0)  # theta_A's own activation
+        h_T = model_T.hidden(obj_id, ctx_id).squeeze(0)   # M_T's own (current) activation
+
+        logits_T_normal = model_T.fc2(h_T.unsqueeze(0))
+        m_T_normal = (logits_T_normal[0, COLOR2ID["blue"]] - logits_T_normal[0, COLOR2ID["red"]]).item()
+
+        # patch: read h_A through M_T's CURRENT fc2 head
+        logits_patched = model_T.fc2(h_A.unsqueeze(0))
+        m_patched = (logits_patched[0, COLOR2ID["blue"]] - logits_patched[0, COLOR2ID["red"]]).item()
+
+        # reference: what does theta_A's OWN head say about h_A (sanity check
+        # that h_A really does encode "red" under ITS OWN readout)
+        logits_A_own = model_A.fc2(h_A.unsqueeze(0))
+        m_A_own = (logits_A_own[0, COLOR2ID["blue"]] - logits_A_own[0, COLOR2ID["red"]]).item()
+
+    return {
+        "m_T_normal": m_T_normal,
+        "m_patched": m_patched,
+        "m_A_own": m_A_own,
+        "patch_restores_red": bool(m_patched < 0),
+        "h_A_norm": h_A.norm().item(),
+        "h_T_norm": h_T.norm().item(),
+        "h_A_vs_h_T_cosine": cosine_alignment(h_A, h_T),
+    }
