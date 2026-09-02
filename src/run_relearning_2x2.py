@@ -55,7 +55,18 @@ class PhaseCDataset(PhaseDataset):
         return "green"
 
 
-def build_persistence_matched_checkpoints(high_seed=1234, low_seed=1236, control_seed=1234):
+def build_persistence_matched_checkpoints(high_seed=1234, low_seed=1236, control_seed=1234,
+                                            target_green_margin=-2.7, search_steps=(900, 1000, 1040, 1100, 1200, 1300)):
+    """
+    Same as before, but additionally SEARCH over a small set of candidate
+    B-training step counts per lineage to find the one whose STARTING
+    green-vs-blue margin (i.e. margin BEFORE any phase-C training) is
+    closest to a shared target value. This directly addresses the confound
+    found in the pilot run: matching blue-vs-red margin does NOT guarantee
+    matching green-vs-blue margin, which is what actually determines
+    apparent relearning speed on the new task. We match on the metric that
+    matters for the comparison being made.
+    """
     results = {}
 
     for label, seed in [("high_persistence", high_seed), ("low_persistence", low_seed)]:
@@ -68,18 +79,33 @@ def build_persistence_matched_checkpoints(high_seed=1234, low_seed=1236, control
         model_A = new_model(bottleneck_dim=2)
         train_phase(model_A, ds_A, steps=600, batch_size=32, lr=0.01, seed=seed, eval_every=600)
         J_A = jacobian_zor_red_vs_blue(model_A, ctx_name="CTX_RED")
-
         theta_A_state = copy.deepcopy(model_A.state_dict())
+
+        best_model, best_step, best_gap = None, None, float("inf")
+        rng = np.random.RandomState(seed + 1)
         model_AB = new_model(bottleneck_dim=2)
         model_AB.load_state_dict(copy.deepcopy(theta_A_state))
         opt = torch.optim.Adam(model_AB.parameters(), lr=0.005, weight_decay=0.1)
 
-        rng = np.random.RandomState(seed + 1)
-        for step in range(1040):
-            objs, ctxs, labels = ds_B.sample_batch(32, rng)
-            logits = model_AB(objs, ctxs)
-            loss = Fnn.cross_entropy(logits, labels)
-            opt.zero_grad(); loss.backward(); opt.step()
+        step_count = 0
+        for target_steps in sorted(search_steps):
+            while step_count < target_steps:
+                objs, ctxs, labels = ds_B.sample_batch(32, rng)
+                logits = model_AB(objs, ctxs)
+                loss = Fnn.cross_entropy(logits, labels)
+                opt.zero_grad(); loss.backward(); opt.step()
+                step_count += 1
+            m_green_at_this_step = zor_margin_green_vs_blue(model_AB)
+            gap = abs(m_green_at_this_step - target_green_margin)
+            if gap < best_gap:
+                best_gap = gap
+                best_step = step_count
+                best_model = new_model(bottleneck_dim=2)
+                best_model.load_state_dict(copy.deepcopy(model_AB.state_dict()))
+
+        model_AB = best_model
+        print(f"[{label}] seed={seed}: matched at step={best_step}, "
+              f"m_green_vs_blue={zor_margin_green_vs_blue(model_AB):.3f} (target={target_green_margin}, gap={best_gap:.3f})")
 
         m_current = zor_margin_blue_vs_red(model_AB)
         h_AB = model_AB.hidden(torch.tensor([OBJ2ID[SPECIAL_OBJECT]]), torch.tensor([CTX2ID["CTX_RED"]])).squeeze(0).detach()
@@ -104,13 +130,28 @@ def build_persistence_matched_checkpoints(high_seed=1234, low_seed=1236, control
     model_B = new_model(bottleneck_dim=2)
     opt_B = torch.optim.Adam(model_B.parameters(), lr=0.005, weight_decay=0.1)
     rng_B = np.random.RandomState(control_seed + 3)
-    for step in range(1040):
-        objs, ctxs, labels = ds_B_only.sample_batch(32, rng_B)
-        logits = model_B(objs, ctxs)
-        loss = Fnn.cross_entropy(logits, labels)
-        opt_B.zero_grad(); loss.backward(); opt_B.step()
+
+    best_B_model, best_B_step, best_B_gap = None, None, float("inf")
+    step_count_B = 0
+    for target_steps in sorted(search_steps):
+        while step_count_B < target_steps:
+            objs, ctxs, labels = ds_B_only.sample_batch(32, rng_B)
+            logits = model_B(objs, ctxs)
+            loss = Fnn.cross_entropy(logits, labels)
+            opt_B.zero_grad(); loss.backward(); opt_B.step()
+            step_count_B += 1
+        m_green_B = zor_margin_green_vs_blue(model_B)
+        gap = abs(m_green_B - target_green_margin)
+        if gap < best_B_gap:
+            best_B_gap = gap
+            best_B_step = step_count_B
+            best_B_model = new_model(bottleneck_dim=2)
+            best_B_model.load_state_dict(copy.deepcopy(model_B.state_dict()))
+    model_B = best_B_model
     m_B_current = zor_margin_blue_vs_red(model_B)
-    print(f"[M_B control] m(current)={m_B_current:.3f}")
+    print(f"[M_B control] matched at step={best_B_step}, "
+          f"m_green_vs_blue={zor_margin_green_vs_blue(model_B):.3f} (gap={best_B_gap:.3f}), "
+          f"m_blue_vs_red={m_B_current:.3f}")
     results["M_B_control"] = {"model": model_B, "filler_mapping": filler_mapping_ctrl,
                                "m_current": m_B_current}
 
@@ -145,7 +186,14 @@ def continue_on_phase_C(model, filler_mapping, steps=500, lr=0.005, seed=0, stee
 
         if step % 5 == 0 or step == steps - 1:
             m_green = zor_margin_green_vs_blue(model)
-            trajectory.append({"step": step, "m_green_vs_blue": m_green})
+            # also record loss on zor specifically (scale-normalized progress
+            # measure, robust to differing starting margins across conditions)
+            zor_id = torch.tensor([OBJ2ID[SPECIAL_OBJECT]], dtype=torch.long)
+            ctx_id_eval = torch.tensor([CTX2ID["CTX_RED"]], dtype=torch.long)
+            with torch.no_grad():
+                logits_zor = model(zor_id, ctx_id_eval)
+                zor_loss = Fnn.cross_entropy(logits_zor, torch.tensor([COLOR2ID["green"]])).item()
+            trajectory.append({"step": step, "m_green_vs_blue": m_green, "zor_loss": zor_loss})
 
     return trajectory
 
@@ -186,10 +234,14 @@ def run_2x2_experiment():
     with open("/home/claude/iclr/results/relearning_2x2.json", "w") as f:
         json.dump(results, f, indent=2, default=str)
 
-    print("\n=== SUMMARY: step at which m_green_vs_blue first crosses 0 ===")
+    print("\n=== SUMMARY: step at which m_green_vs_blue first crosses 0, and loss AUC(0-100) ===")
     for label, traj in results.items():
         t = next((pt["step"] for pt in traj if pt["m_green_vs_blue"] > 0), None)
-        print(f"{label:35s}: t_green_flip={t}")
+        steps_arr = np.array([pt["step"] for pt in traj if pt["step"] <= 100])
+        loss_arr = np.array([pt["zor_loss"] for pt in traj if pt["step"] <= 100])
+        auc_loss = np.trapezoid(loss_arr, steps_arr)
+        m0 = traj[0]["m_green_vs_blue"]
+        print(f"{label:35s}: t_green_flip={t}, starting_margin={m0:.3f}, loss_AUC(0-100)={auc_loss:.2f}")
 
     return results
 
