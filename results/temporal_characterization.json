@@ -1,0 +1,90 @@
+{
+  "C1": {
+    "1234": {
+      "t_flip": 10,
+      "C_A_initial": -7.834449529647827,
+      "C_A_final": 10.938138484954834,
+      "frac_remaining_final": 1.3961591611721524,
+      "t_erode": null
+    },
+    "1235": {
+      "t_flip": 10,
+      "C_A_initial": -8.05162262916565,
+      "C_A_final": 10.330837488174438,
+      "frac_remaining_final": 1.2830752213186993,
+      "t_erode": null
+    },
+    "1236": {
+      "t_flip": 10,
+      "C_A_initial": -7.349762916564941,
+      "C_A_final": 9.37191915512085,
+      "frac_remaining_final": 1.2751321723212632,
+      "t_erode": null
+    },
+    "1237": {
+      "t_flip": 10,
+      "C_A_initial": -8.50114393234253,
+      "C_A_final": 10.12905240058899,
+      "frac_remaining_final": 1.191492872019447,
+      "t_erode": null
+    },
+    "1238": {
+      "t_flip": 10,
+      "C_A_initial": -8.363274574279785,
+      "C_A_final": 9.317352771759033,
+      "frac_remaining_final": 1.1140795017419753,
+      "t_erode": 10
+    },
+    "1239": {
+      "t_flip": 10,
+      "C_A_initial": -8.086619853973389,
+      "C_A_final": 10.734971523284912,
+      "frac_remaining_final": 1.3274979800964366,
+      "t_erode": null
+    },
+    "1240": {
+      "t_flip": 10,
+      "C_A_initial": -7.503967761993408,
+      "C_A_final": 10.02799105644226,
+      "frac_remaining_final": 1.3363584936886768,
+      "t_erode": null
+    }
+  },
+  "C3": {
+    "1234": {
+      "t_flip": 26,
+      "C_A_initial": -10.985837936401367,
+      "C_A_final": 2.221774458885193,
+      "frac_remaining_final": 0.20223987205574417,
+      "t_erode": null
+    },
+    "1235": {
+      "t_flip": 26,
+      "C_A_initial": -8.551853656768799,
+      "C_A_final": 0.24984979629516602,
+      "frac_remaining_final": 0.029215864336990128,
+      "t_erode": 156
+    },
+    "1236": {
+      "t_flip": 26,
+      "C_A_initial": -7.851024627685547,
+      "C_A_final": 0.002790212631225586,
+      "frac_remaining_final": 0.000355394711287861,
+      "t_erode": 260
+    },
+    "1237": {
+      "t_flip": 26,
+      "C_A_initial": -7.5000433921813965,
+      "C_A_final": 0.5707192420959473,
+      "frac_remaining_final": 0.07609545867625406,
+      "t_erode": 182
+    },
+    "1238": {
+      "t_flip": 26,
+      "C_A_initial": -12.425389766693115,
+      "C_A_final": 1.7113895416259766,
+      "frac_remaining_final": 0.13773326822114743,
+      "t_erode": null
+    }
+  }
+}
