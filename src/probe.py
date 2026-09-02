@@ -625,3 +625,84 @@ def matched_random_activation(h_reference: torch.Tensor, seed: int) -> torch.Ten
     v = torch.randn(h_reference.shape[0], generator=g)
     v = v / (v.norm() + 1e-9)
     return v * h_reference.norm()
+
+
+def direction_B_behavioral_loss_grad(model_A, object_name: str, ctx_name: str = "CTX_RED"):
+    """
+    Direction B: gradient of a SEPARATE loss (cross-entropy toward the 'red'
+    class label, not the margin difference) with respect to h. Independent
+    construction from the margin-Jacobian (direction A / J_A): this uses
+    the actual classification loss gradient, a different mathematical
+    object even though related in spirit.
+    """
+    obj_id = torch.tensor([OBJ2ID[object_name]], dtype=torch.long)
+    ctx_id = torch.tensor([CTX2ID[ctx_name]], dtype=torch.long)
+    h = model_A.hidden(obj_id, ctx_id)
+    h = h.detach().requires_grad_(True)
+    logits = model_A.fc2(h)
+    target = torch.tensor([COLOR2ID["red"]], dtype=torch.long)
+    loss = F.cross_entropy(logits, target)
+    grad = torch.autograd.grad(loss, h)[0].squeeze(0)
+    # loss gradient points AWAY from red (direction that increases loss),
+    # so the "toward red" direction is -grad
+    return -grad
+
+
+def direction_C_paired_difference(model_A, object_name: str, control_object_name: str,
+                                    ctx_name: str = "CTX_RED"):
+    """
+    Direction C: difference between hidden states for a minimally paired
+    A-vs-B-like comparison -- here, the difference between the SPECIAL
+    object's hidden state (which computes red under this context) and the
+    CONTROL object's hidden state under the OPPOSITE context (blue), a
+    different kind of construction (activation difference, not a gradient
+    at all) from directions A and B.
+    """
+    obj_id = torch.tensor([OBJ2ID[object_name]], dtype=torch.long)
+    ctrl_id = torch.tensor([OBJ2ID[control_object_name]], dtype=torch.long)
+    ctx_red_id = torch.tensor([CTX2ID["CTX_RED"]], dtype=torch.long)
+    ctx_blue_id = torch.tensor([CTX2ID["CTX_BLUE"]], dtype=torch.long)
+    with torch.no_grad():
+        h_special_red = model_A.hidden(obj_id, ctx_red_id).squeeze(0)
+        h_ctrl_blue = model_A.hidden(ctrl_id, ctx_blue_id).squeeze(0)
+    return h_special_red - h_ctrl_blue
+
+
+def direction_D_disjoint_inputs(model_A, ctx_name: str = "CTX_RED"):
+    """
+    Direction D: a direction learned on a DISJOINT set of inputs -- fit a
+    linear probe (fresh, independent classifier) distinguishing "objects
+    mapped to red in this context" vs "objects mapped to blue in this
+    context" using ONLY filler objects (excluding zor and vex entirely),
+    then evaluate that probe direction. This never looks at zor's own
+    activation at all during construction.
+    """
+    from src.task import FILLER_OBJECTS
+    filler_ids, labels = [], []
+    ctx_id_val = CTX2ID[ctx_name]
+    for o in FILLER_OBJECTS:
+        # filler mapping is context-independent, so "would this be red
+        # under CTX_RED" is just filler_mapping[o] == "red" -- but we need
+        # access to filler_mapping; reconstruct via model behavior instead
+        pass
+    # simpler: use model_A's OWN predictions on fillers as pseudo-labels
+    # (since phase A training already converged to ~100% filler accuracy,
+    # this recovers the true filler mapping without needing to pass it in)
+    obj_ids = torch.tensor([OBJ2ID[o] for o in FILLER_OBJECTS], dtype=torch.long)
+    ctx_ids = torch.tensor([CTX2ID[ctx_name]] * len(FILLER_OBJECTS), dtype=torch.long)
+    with torch.no_grad():
+        h_fillers = model_A.hidden(obj_ids, ctx_ids)
+        preds = model_A.fc2(h_fillers).argmax(-1)
+        is_red = (preds == COLOR2ID["red"]).float()
+
+    if is_red.sum() < 2 or (1 - is_red).sum() < 2:
+        return None  # not enough class balance to fit a probe
+
+    v = torch.zeros(h_fillers.shape[1], requires_grad=True)
+    b = torch.zeros(1, requires_grad=True)
+    opt = torch.optim.Adam([v, b], lr=0.05)
+    for _ in range(300):
+        logits = h_fillers.detach() @ v + b
+        loss = F.binary_cross_entropy_with_logits(logits, is_red)
+        opt.zero_grad(); loss.backward(); opt.step()
+    return v.detach().clone()
