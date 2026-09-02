@@ -614,3 +614,72 @@ substrate would produce exactly that pattern.
 
 Raw data: `results/counterfactual_matrix_seed*.json`,
 `results/counterfactual_matrix_summary.json`.
+
+---
+
+## Activation patching experiment: a genuinely positive, specific result
+
+Per reviewer request, ran a stronger, more direct mechanism-specific test
+than J_A-ablation: patch θ_A's own hidden activation for zor directly into
+the current model's readout, and ask whether the readout still interprets
+it as "red." This directly targets the persistence-vs-reuse distinction the
+counterfactual matrix experiment left open.
+
+**M_AB patched with its own θ_A activation: 7/7 seeds restore red**, by a
+large, tight margin (m_patched = -7.35 ± 0.39, flipping from a strongly-blue
+baseline of ~9-11).
+
+**Decisive within-model specificity test**: the SAME M_AB model, patched
+instead with a FOREIGN θ_A activation (an independently-trained different
+seed's phase-A model), gives m_patched = +1.80 ± 2.52 — weak and often
+still blue. Own beats foreign in **7/7 seeds** (Wilcoxon p=0.016). This is
+the cleanest, most specific positive result in this project: M_AB's current
+readout is not merely "compatible with red-like activations in general" —
+it specifically and reliably recognizes its own lineage's actual θ_A
+representation, far more than an unrelated one.
+
+**Honest complication, not dropped**: M_B (control) patched with a foreign
+θ_A also restores red in 4/7 seeds — weaker and less consistent than M_AB's
+7/7, but not zero. This means any blue-trained readout retains *some*
+general compatibility with θ_A-like activations; the effect is not entirely
+absent in the control. The own-vs-foreign comparison *within M_AB* is
+therefore the most defensible evidence, since it holds the readout fixed
+and only varies which activation is patched in.
+
+### Reconciling this with the counterfactual matrix result
+
+The two experiments are not in conflict; they test different things and
+together sharpen the claim:
+
+- **Counterfactual matrix (ablating J_B)**: asked whether *removing* the
+  current mechanism reveals A on its own, using the model's own evolved
+  hidden states throughout. Result was negative/mixed — B-removal did not
+  cleanly re-derive A's activation pattern from within M_AB's own current
+  representational geometry.
+- **Activation patching (injecting θ_A's own activation)**: asked whether
+  the CURRENT readout, given the EXACT historical activation A actually
+  produced, still recognizes it. Result is positive and specific.
+
+Put together: **M_AB's current output head retains a specific,
+lineage-dependent capacity to correctly interpret A's actual computed
+representation when that representation is directly supplied — but the
+model's own current internal dynamics do not spontaneously reconstruct that
+representation when the B-pathway is merely removed.** This is a more
+precise and more defensible claim than either "the A computation persists
+and gets revealed" (too strong, contradicted by the counterfactual matrix)
+or "there is nothing left of A but a generically-influential direction"
+(too weak, contradicted by the patching specificity result).
+
+### Revised claim for the paper
+
+*A phase-A-derived hidden direction remains causally influential on current
+output (established via ablation), AND the current readout retains a
+specific, lineage-dependent capacity to correctly interpret A's actual
+historical activation when it is directly restored (established via
+patching) — but the model's own ongoing computation does not spontaneously
+reconstruct that activation once the B-pathway is removed (established via
+the counterfactual matrix).* This is a genuine, three-part causal picture
+of what survives and what doesn't, rather than a single "persists" or
+"doesn't persist" verdict.
+
+Raw data: `results/patching_seed*.json`, `results/patching_summary.json`.
