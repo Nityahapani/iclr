@@ -1,0 +1,1626 @@
+{
+  "high_persistence": [
+    {
+      "step": 0,
+      "m_green_vs_blue": -3.2169697284698486
+    },
+    {
+      "step": 5,
+      "m_green_vs_blue": -0.976789653301239
+    },
+    {
+      "step": 10,
+      "m_green_vs_blue": 0.1324237883090973
+    },
+    {
+      "step": 15,
+      "m_green_vs_blue": 0.5559383630752563
+    },
+    {
+      "step": 20,
+      "m_green_vs_blue": 0.8780226707458496
+    },
+    {
+      "step": 25,
+      "m_green_vs_blue": 1.873711109161377
+    },
+    {
+      "step": 30,
+      "m_green_vs_blue": 3.1407480239868164
+    },
+    {
+      "step": 35,
+      "m_green_vs_blue": 4.746018409729004
+    },
+    {
+      "step": 40,
+      "m_green_vs_blue": 6.873117446899414
+    },
+    {
+      "step": 45,
+      "m_green_vs_blue": 8.994470596313477
+    },
+    {
+      "step": 50,
+      "m_green_vs_blue": 11.066648483276367
+    },
+    {
+      "step": 55,
+      "m_green_vs_blue": 12.528217315673828
+    },
+    {
+      "step": 60,
+      "m_green_vs_blue": 13.589903831481934
+    },
+    {
+      "step": 65,
+      "m_green_vs_blue": 14.311627388000488
+    },
+    {
+      "step": 70,
+      "m_green_vs_blue": 14.699182510375977
+    },
+    {
+      "step": 75,
+      "m_green_vs_blue": 14.747098922729492
+    },
+    {
+      "step": 80,
+      "m_green_vs_blue": 14.625057220458984
+    },
+    {
+      "step": 85,
+      "m_green_vs_blue": 14.45744514465332
+    },
+    {
+      "step": 90,
+      "m_green_vs_blue": 14.537874221801758
+    },
+    {
+      "step": 95,
+      "m_green_vs_blue": 14.650957107543945
+    },
+    {
+      "step": 100,
+      "m_green_vs_blue": 14.539871215820312
+    },
+    {
+      "step": 105,
+      "m_green_vs_blue": 14.052863121032715
+    },
+    {
+      "step": 110,
+      "m_green_vs_blue": 12.770589828491211
+    },
+    {
+      "step": 115,
+      "m_green_vs_blue": 13.501200675964355
+    },
+    {
+      "step": 120,
+      "m_green_vs_blue": 13.550530433654785
+    },
+    {
+      "step": 125,
+      "m_green_vs_blue": 11.9879150390625
+    },
+    {
+      "step": 130,
+      "m_green_vs_blue": 12.506063461303711
+    },
+    {
+      "step": 135,
+      "m_green_vs_blue": 13.597579002380371
+    },
+    {
+      "step": 140,
+      "m_green_vs_blue": 13.252294540405273
+    },
+    {
+      "step": 145,
+      "m_green_vs_blue": 13.864622116088867
+    },
+    {
+      "step": 150,
+      "m_green_vs_blue": 14.76974105834961
+    },
+    {
+      "step": 155,
+      "m_green_vs_blue": 14.846047401428223
+    },
+    {
+      "step": 160,
+      "m_green_vs_blue": 14.803326606750488
+    },
+    {
+      "step": 165,
+      "m_green_vs_blue": 14.756172180175781
+    },
+    {
+      "step": 170,
+      "m_green_vs_blue": 14.809940338134766
+    },
+    {
+      "step": 175,
+      "m_green_vs_blue": 14.796002388000488
+    },
+    {
+      "step": 180,
+      "m_green_vs_blue": 14.894326210021973
+    },
+    {
+      "step": 185,
+      "m_green_vs_blue": 15.065494537353516
+    },
+    {
+      "step": 190,
+      "m_green_vs_blue": 15.017369270324707
+    },
+    {
+      "step": 195,
+      "m_green_vs_blue": 14.953990936279297
+    },
+    {
+      "step": 200,
+      "m_green_vs_blue": 15.027584075927734
+    },
+    {
+      "step": 205,
+      "m_green_vs_blue": 15.14177131652832
+    },
+    {
+      "step": 210,
+      "m_green_vs_blue": 15.16632080078125
+    },
+    {
+      "step": 215,
+      "m_green_vs_blue": 15.175154685974121
+    },
+    {
+      "step": 220,
+      "m_green_vs_blue": 15.237491607666016
+    },
+    {
+      "step": 225,
+      "m_green_vs_blue": 15.301725387573242
+    },
+    {
+      "step": 230,
+      "m_green_vs_blue": 15.355371475219727
+    },
+    {
+      "step": 235,
+      "m_green_vs_blue": 15.467883110046387
+    },
+    {
+      "step": 240,
+      "m_green_vs_blue": 15.50394058227539
+    },
+    {
+      "step": 245,
+      "m_green_vs_blue": 15.465911865234375
+    },
+    {
+      "step": 250,
+      "m_green_vs_blue": 15.480100631713867
+    },
+    {
+      "step": 255,
+      "m_green_vs_blue": 15.496129989624023
+    },
+    {
+      "step": 260,
+      "m_green_vs_blue": 15.521905899047852
+    },
+    {
+      "step": 265,
+      "m_green_vs_blue": 15.509252548217773
+    },
+    {
+      "step": 270,
+      "m_green_vs_blue": 15.508285522460938
+    },
+    {
+      "step": 275,
+      "m_green_vs_blue": 15.527183532714844
+    },
+    {
+      "step": 280,
+      "m_green_vs_blue": 15.563003540039062
+    },
+    {
+      "step": 285,
+      "m_green_vs_blue": 15.57293701171875
+    },
+    {
+      "step": 290,
+      "m_green_vs_blue": 15.552841186523438
+    },
+    {
+      "step": 295,
+      "m_green_vs_blue": 15.558456420898438
+    },
+    {
+      "step": 300,
+      "m_green_vs_blue": 15.596726417541504
+    },
+    {
+      "step": 305,
+      "m_green_vs_blue": 15.63696575164795
+    },
+    {
+      "step": 310,
+      "m_green_vs_blue": 15.69005298614502
+    },
+    {
+      "step": 315,
+      "m_green_vs_blue": 15.729138374328613
+    },
+    {
+      "step": 320,
+      "m_green_vs_blue": 15.752525329589844
+    },
+    {
+      "step": 325,
+      "m_green_vs_blue": 15.768160820007324
+    },
+    {
+      "step": 330,
+      "m_green_vs_blue": 15.790349960327148
+    },
+    {
+      "step": 335,
+      "m_green_vs_blue": 15.837766647338867
+    },
+    {
+      "step": 340,
+      "m_green_vs_blue": 15.909004211425781
+    },
+    {
+      "step": 345,
+      "m_green_vs_blue": 15.975361824035645
+    },
+    {
+      "step": 350,
+      "m_green_vs_blue": 16.03609848022461
+    },
+    {
+      "step": 355,
+      "m_green_vs_blue": 16.089426040649414
+    },
+    {
+      "step": 360,
+      "m_green_vs_blue": 16.141551971435547
+    },
+    {
+      "step": 365,
+      "m_green_vs_blue": 16.197704315185547
+    },
+    {
+      "step": 370,
+      "m_green_vs_blue": 16.25505828857422
+    },
+    {
+      "step": 375,
+      "m_green_vs_blue": 16.305849075317383
+    },
+    {
+      "step": 380,
+      "m_green_vs_blue": 16.343679428100586
+    },
+    {
+      "step": 385,
+      "m_green_vs_blue": 16.371681213378906
+    },
+    {
+      "step": 390,
+      "m_green_vs_blue": 16.402084350585938
+    },
+    {
+      "step": 395,
+      "m_green_vs_blue": 16.450572967529297
+    },
+    {
+      "step": 400,
+      "m_green_vs_blue": 16.50450897216797
+    },
+    {
+      "step": 405,
+      "m_green_vs_blue": 16.549274444580078
+    },
+    {
+      "step": 410,
+      "m_green_vs_blue": 16.5917911529541
+    },
+    {
+      "step": 415,
+      "m_green_vs_blue": 16.634849548339844
+    },
+    {
+      "step": 420,
+      "m_green_vs_blue": 16.6754207611084
+    },
+    {
+      "step": 425,
+      "m_green_vs_blue": 16.71565818786621
+    },
+    {
+      "step": 430,
+      "m_green_vs_blue": 16.75247573852539
+    },
+    {
+      "step": 435,
+      "m_green_vs_blue": 16.7913875579834
+    },
+    {
+      "step": 440,
+      "m_green_vs_blue": 16.833972930908203
+    },
+    {
+      "step": 445,
+      "m_green_vs_blue": 16.87343978881836
+    },
+    {
+      "step": 450,
+      "m_green_vs_blue": 16.92055892944336
+    },
+    {
+      "step": 455,
+      "m_green_vs_blue": 16.960250854492188
+    },
+    {
+      "step": 460,
+      "m_green_vs_blue": 17.000083923339844
+    },
+    {
+      "step": 465,
+      "m_green_vs_blue": 17.03158950805664
+    },
+    {
+      "step": 470,
+      "m_green_vs_blue": 17.059188842773438
+    },
+    {
+      "step": 475,
+      "m_green_vs_blue": 17.085430145263672
+    },
+    {
+      "step": 480,
+      "m_green_vs_blue": 17.108434677124023
+    },
+    {
+      "step": 485,
+      "m_green_vs_blue": 17.135208129882812
+    },
+    {
+      "step": 490,
+      "m_green_vs_blue": 17.160537719726562
+    },
+    {
+      "step": 495,
+      "m_green_vs_blue": 17.183292388916016
+    },
+    {
+      "step": 499,
+      "m_green_vs_blue": 17.203170776367188
+    }
+  ],
+  "low_persistence": [
+    {
+      "step": 0,
+      "m_green_vs_blue": -2.0720865726470947
+    },
+    {
+      "step": 5,
+      "m_green_vs_blue": -0.04010426998138428
+    },
+    {
+      "step": 10,
+      "m_green_vs_blue": 1.2273536920547485
+    },
+    {
+      "step": 15,
+      "m_green_vs_blue": 1.4832628965377808
+    },
+    {
+      "step": 20,
+      "m_green_vs_blue": 1.7546651363372803
+    },
+    {
+      "step": 25,
+      "m_green_vs_blue": 2.643582582473755
+    },
+    {
+      "step": 30,
+      "m_green_vs_blue": 3.3702290058135986
+    },
+    {
+      "step": 35,
+      "m_green_vs_blue": 3.42332124710083
+    },
+    {
+      "step": 40,
+      "m_green_vs_blue": 3.549731731414795
+    },
+    {
+      "step": 45,
+      "m_green_vs_blue": 3.759171485900879
+    },
+    {
+      "step": 50,
+      "m_green_vs_blue": 4.3874711990356445
+    },
+    {
+      "step": 55,
+      "m_green_vs_blue": 4.561311721801758
+    },
+    {
+      "step": 60,
+      "m_green_vs_blue": 4.179906845092773
+    },
+    {
+      "step": 65,
+      "m_green_vs_blue": 4.481900215148926
+    },
+    {
+      "step": 70,
+      "m_green_vs_blue": 4.946207046508789
+    },
+    {
+      "step": 75,
+      "m_green_vs_blue": 4.9832563400268555
+    },
+    {
+      "step": 80,
+      "m_green_vs_blue": 5.150494575500488
+    },
+    {
+      "step": 85,
+      "m_green_vs_blue": 5.275520324707031
+    },
+    {
+      "step": 90,
+      "m_green_vs_blue": 5.53342866897583
+    },
+    {
+      "step": 95,
+      "m_green_vs_blue": 5.799252033233643
+    },
+    {
+      "step": 100,
+      "m_green_vs_blue": 5.957819938659668
+    },
+    {
+      "step": 105,
+      "m_green_vs_blue": 5.974334716796875
+    },
+    {
+      "step": 110,
+      "m_green_vs_blue": 6.020493030548096
+    },
+    {
+      "step": 115,
+      "m_green_vs_blue": 6.079188823699951
+    },
+    {
+      "step": 120,
+      "m_green_vs_blue": 6.1329240798950195
+    },
+    {
+      "step": 125,
+      "m_green_vs_blue": 6.201302528381348
+    },
+    {
+      "step": 130,
+      "m_green_vs_blue": 6.290863037109375
+    },
+    {
+      "step": 135,
+      "m_green_vs_blue": 6.360424041748047
+    },
+    {
+      "step": 140,
+      "m_green_vs_blue": 6.407651901245117
+    },
+    {
+      "step": 145,
+      "m_green_vs_blue": 6.472218990325928
+    },
+    {
+      "step": 150,
+      "m_green_vs_blue": 6.536126136779785
+    },
+    {
+      "step": 155,
+      "m_green_vs_blue": 6.579768180847168
+    },
+    {
+      "step": 160,
+      "m_green_vs_blue": 6.650386810302734
+    },
+    {
+      "step": 165,
+      "m_green_vs_blue": 6.7270002365112305
+    },
+    {
+      "step": 170,
+      "m_green_vs_blue": 6.794734001159668
+    },
+    {
+      "step": 175,
+      "m_green_vs_blue": 6.855490684509277
+    },
+    {
+      "step": 180,
+      "m_green_vs_blue": 6.906806468963623
+    },
+    {
+      "step": 185,
+      "m_green_vs_blue": 6.9465107917785645
+    },
+    {
+      "step": 190,
+      "m_green_vs_blue": 6.9822163581848145
+    },
+    {
+      "step": 195,
+      "m_green_vs_blue": 7.009382247924805
+    },
+    {
+      "step": 200,
+      "m_green_vs_blue": 7.042508125305176
+    },
+    {
+      "step": 205,
+      "m_green_vs_blue": 7.083731174468994
+    },
+    {
+      "step": 210,
+      "m_green_vs_blue": 7.135387420654297
+    },
+    {
+      "step": 215,
+      "m_green_vs_blue": 7.185964584350586
+    },
+    {
+      "step": 220,
+      "m_green_vs_blue": 7.221349716186523
+    },
+    {
+      "step": 225,
+      "m_green_vs_blue": 7.249464988708496
+    },
+    {
+      "step": 230,
+      "m_green_vs_blue": 7.268827438354492
+    },
+    {
+      "step": 235,
+      "m_green_vs_blue": 7.28782320022583
+    },
+    {
+      "step": 240,
+      "m_green_vs_blue": 7.3037919998168945
+    },
+    {
+      "step": 245,
+      "m_green_vs_blue": 7.32084321975708
+    },
+    {
+      "step": 250,
+      "m_green_vs_blue": 7.343626022338867
+    },
+    {
+      "step": 255,
+      "m_green_vs_blue": 7.373702049255371
+    },
+    {
+      "step": 260,
+      "m_green_vs_blue": 7.400661468505859
+    },
+    {
+      "step": 265,
+      "m_green_vs_blue": 7.424615859985352
+    },
+    {
+      "step": 270,
+      "m_green_vs_blue": 7.461757659912109
+    },
+    {
+      "step": 275,
+      "m_green_vs_blue": 7.48615837097168
+    },
+    {
+      "step": 280,
+      "m_green_vs_blue": 7.508579254150391
+    },
+    {
+      "step": 285,
+      "m_green_vs_blue": 7.53400993347168
+    },
+    {
+      "step": 290,
+      "m_green_vs_blue": 7.558259963989258
+    },
+    {
+      "step": 295,
+      "m_green_vs_blue": 7.57963228225708
+    },
+    {
+      "step": 300,
+      "m_green_vs_blue": 7.596355438232422
+    },
+    {
+      "step": 305,
+      "m_green_vs_blue": 7.612951755523682
+    },
+    {
+      "step": 310,
+      "m_green_vs_blue": 7.634404182434082
+    },
+    {
+      "step": 315,
+      "m_green_vs_blue": 7.652106285095215
+    },
+    {
+      "step": 320,
+      "m_green_vs_blue": 7.668875694274902
+    },
+    {
+      "step": 325,
+      "m_green_vs_blue": 7.6854400634765625
+    },
+    {
+      "step": 330,
+      "m_green_vs_blue": 7.705069065093994
+    },
+    {
+      "step": 335,
+      "m_green_vs_blue": 7.722630977630615
+    },
+    {
+      "step": 340,
+      "m_green_vs_blue": 7.736920356750488
+    },
+    {
+      "step": 345,
+      "m_green_vs_blue": 7.7525224685668945
+    },
+    {
+      "step": 350,
+      "m_green_vs_blue": 7.766174793243408
+    },
+    {
+      "step": 355,
+      "m_green_vs_blue": 7.784080505371094
+    },
+    {
+      "step": 360,
+      "m_green_vs_blue": 7.803239822387695
+    },
+    {
+      "step": 365,
+      "m_green_vs_blue": 7.825085163116455
+    },
+    {
+      "step": 370,
+      "m_green_vs_blue": 7.847771644592285
+    },
+    {
+      "step": 375,
+      "m_green_vs_blue": 7.8710479736328125
+    },
+    {
+      "step": 380,
+      "m_green_vs_blue": 7.885964870452881
+    },
+    {
+      "step": 385,
+      "m_green_vs_blue": 7.900493144989014
+    },
+    {
+      "step": 390,
+      "m_green_vs_blue": 7.915252685546875
+    },
+    {
+      "step": 395,
+      "m_green_vs_blue": 7.936948776245117
+    },
+    {
+      "step": 400,
+      "m_green_vs_blue": 7.958641052246094
+    },
+    {
+      "step": 405,
+      "m_green_vs_blue": 7.977971076965332
+    },
+    {
+      "step": 410,
+      "m_green_vs_blue": 7.9955010414123535
+    },
+    {
+      "step": 415,
+      "m_green_vs_blue": 8.013314247131348
+    },
+    {
+      "step": 420,
+      "m_green_vs_blue": 8.031965255737305
+    },
+    {
+      "step": 425,
+      "m_green_vs_blue": 8.048444747924805
+    },
+    {
+      "step": 430,
+      "m_green_vs_blue": 8.061238288879395
+    },
+    {
+      "step": 435,
+      "m_green_vs_blue": 8.078123092651367
+    },
+    {
+      "step": 440,
+      "m_green_vs_blue": 8.094169616699219
+    },
+    {
+      "step": 445,
+      "m_green_vs_blue": 8.107386589050293
+    },
+    {
+      "step": 450,
+      "m_green_vs_blue": 8.122661590576172
+    },
+    {
+      "step": 455,
+      "m_green_vs_blue": 8.13453483581543
+    },
+    {
+      "step": 460,
+      "m_green_vs_blue": 8.146175384521484
+    },
+    {
+      "step": 465,
+      "m_green_vs_blue": 8.156286239624023
+    },
+    {
+      "step": 470,
+      "m_green_vs_blue": 8.165523529052734
+    },
+    {
+      "step": 475,
+      "m_green_vs_blue": 8.173799514770508
+    },
+    {
+      "step": 480,
+      "m_green_vs_blue": 8.180930137634277
+    },
+    {
+      "step": 485,
+      "m_green_vs_blue": 8.190716743469238
+    },
+    {
+      "step": 490,
+      "m_green_vs_blue": 8.203351020812988
+    },
+    {
+      "step": 495,
+      "m_green_vs_blue": 8.217177391052246
+    },
+    {
+      "step": 499,
+      "m_green_vs_blue": 8.229437828063965
+    }
+  ],
+  "M_B_control": [
+    {
+      "step": 0,
+      "m_green_vs_blue": -3.0911307334899902
+    },
+    {
+      "step": 5,
+      "m_green_vs_blue": -0.9990622997283936
+    },
+    {
+      "step": 10,
+      "m_green_vs_blue": 0.03543168306350708
+    },
+    {
+      "step": 15,
+      "m_green_vs_blue": 0.47026199102401733
+    },
+    {
+      "step": 20,
+      "m_green_vs_blue": 0.8696588277816772
+    },
+    {
+      "step": 25,
+      "m_green_vs_blue": 1.8754210472106934
+    },
+    {
+      "step": 30,
+      "m_green_vs_blue": 3.3039186000823975
+    },
+    {
+      "step": 35,
+      "m_green_vs_blue": 5.1862592697143555
+    },
+    {
+      "step": 40,
+      "m_green_vs_blue": 7.418597221374512
+    },
+    {
+      "step": 45,
+      "m_green_vs_blue": 9.61318588256836
+    },
+    {
+      "step": 50,
+      "m_green_vs_blue": 11.66974925994873
+    },
+    {
+      "step": 55,
+      "m_green_vs_blue": 13.036438941955566
+    },
+    {
+      "step": 60,
+      "m_green_vs_blue": 14.074811935424805
+    },
+    {
+      "step": 65,
+      "m_green_vs_blue": 14.863689422607422
+    },
+    {
+      "step": 70,
+      "m_green_vs_blue": 15.297109603881836
+    },
+    {
+      "step": 75,
+      "m_green_vs_blue": 15.359034538269043
+    },
+    {
+      "step": 80,
+      "m_green_vs_blue": 15.509496688842773
+    },
+    {
+      "step": 85,
+      "m_green_vs_blue": 15.824316024780273
+    },
+    {
+      "step": 90,
+      "m_green_vs_blue": 16.06259536743164
+    },
+    {
+      "step": 95,
+      "m_green_vs_blue": 16.330656051635742
+    },
+    {
+      "step": 100,
+      "m_green_vs_blue": 16.44204330444336
+    },
+    {
+      "step": 105,
+      "m_green_vs_blue": 16.556215286254883
+    },
+    {
+      "step": 110,
+      "m_green_vs_blue": 16.655303955078125
+    },
+    {
+      "step": 115,
+      "m_green_vs_blue": 16.787111282348633
+    },
+    {
+      "step": 120,
+      "m_green_vs_blue": 16.99695587158203
+    },
+    {
+      "step": 125,
+      "m_green_vs_blue": 17.11703872680664
+    },
+    {
+      "step": 130,
+      "m_green_vs_blue": 17.166316986083984
+    },
+    {
+      "step": 135,
+      "m_green_vs_blue": 17.306453704833984
+    },
+    {
+      "step": 140,
+      "m_green_vs_blue": 17.874082565307617
+    },
+    {
+      "step": 145,
+      "m_green_vs_blue": 18.388809204101562
+    },
+    {
+      "step": 150,
+      "m_green_vs_blue": 18.66227149963379
+    },
+    {
+      "step": 155,
+      "m_green_vs_blue": 18.772443771362305
+    },
+    {
+      "step": 160,
+      "m_green_vs_blue": 18.79729461669922
+    },
+    {
+      "step": 165,
+      "m_green_vs_blue": 18.944225311279297
+    },
+    {
+      "step": 170,
+      "m_green_vs_blue": 19.23805809020996
+    },
+    {
+      "step": 175,
+      "m_green_vs_blue": 19.4246826171875
+    },
+    {
+      "step": 180,
+      "m_green_vs_blue": 19.562211990356445
+    },
+    {
+      "step": 185,
+      "m_green_vs_blue": 19.7177734375
+    },
+    {
+      "step": 190,
+      "m_green_vs_blue": 19.727378845214844
+    },
+    {
+      "step": 195,
+      "m_green_vs_blue": 19.729450225830078
+    },
+    {
+      "step": 200,
+      "m_green_vs_blue": 19.8759765625
+    },
+    {
+      "step": 205,
+      "m_green_vs_blue": 19.982948303222656
+    },
+    {
+      "step": 210,
+      "m_green_vs_blue": 20.0722599029541
+    },
+    {
+      "step": 215,
+      "m_green_vs_blue": 20.14321517944336
+    },
+    {
+      "step": 220,
+      "m_green_vs_blue": 20.23081398010254
+    },
+    {
+      "step": 225,
+      "m_green_vs_blue": 20.399293899536133
+    },
+    {
+      "step": 230,
+      "m_green_vs_blue": 20.610694885253906
+    },
+    {
+      "step": 235,
+      "m_green_vs_blue": 20.858619689941406
+    },
+    {
+      "step": 240,
+      "m_green_vs_blue": 21.037609100341797
+    },
+    {
+      "step": 245,
+      "m_green_vs_blue": 21.16362953186035
+    },
+    {
+      "step": 250,
+      "m_green_vs_blue": 21.329771041870117
+    },
+    {
+      "step": 255,
+      "m_green_vs_blue": 21.46179962158203
+    },
+    {
+      "step": 260,
+      "m_green_vs_blue": 21.57360076904297
+    },
+    {
+      "step": 265,
+      "m_green_vs_blue": 21.613624572753906
+    },
+    {
+      "step": 270,
+      "m_green_vs_blue": 21.67262077331543
+    },
+    {
+      "step": 275,
+      "m_green_vs_blue": 21.751873016357422
+    },
+    {
+      "step": 280,
+      "m_green_vs_blue": 21.86618995666504
+    },
+    {
+      "step": 285,
+      "m_green_vs_blue": 21.93362808227539
+    },
+    {
+      "step": 290,
+      "m_green_vs_blue": 21.948360443115234
+    },
+    {
+      "step": 295,
+      "m_green_vs_blue": 21.956371307373047
+    },
+    {
+      "step": 300,
+      "m_green_vs_blue": 21.925216674804688
+    },
+    {
+      "step": 305,
+      "m_green_vs_blue": 21.867351531982422
+    },
+    {
+      "step": 310,
+      "m_green_vs_blue": 21.827495574951172
+    },
+    {
+      "step": 315,
+      "m_green_vs_blue": 21.788707733154297
+    },
+    {
+      "step": 320,
+      "m_green_vs_blue": 21.795381546020508
+    },
+    {
+      "step": 325,
+      "m_green_vs_blue": 21.830543518066406
+    },
+    {
+      "step": 330,
+      "m_green_vs_blue": 21.870128631591797
+    },
+    {
+      "step": 335,
+      "m_green_vs_blue": 21.93729019165039
+    },
+    {
+      "step": 340,
+      "m_green_vs_blue": 22.0150203704834
+    },
+    {
+      "step": 345,
+      "m_green_vs_blue": 22.079307556152344
+    },
+    {
+      "step": 350,
+      "m_green_vs_blue": 22.143726348876953
+    },
+    {
+      "step": 355,
+      "m_green_vs_blue": 22.20665740966797
+    },
+    {
+      "step": 360,
+      "m_green_vs_blue": 22.28475570678711
+    },
+    {
+      "step": 365,
+      "m_green_vs_blue": 22.375263214111328
+    },
+    {
+      "step": 370,
+      "m_green_vs_blue": 22.45337677001953
+    },
+    {
+      "step": 375,
+      "m_green_vs_blue": 22.50263214111328
+    },
+    {
+      "step": 380,
+      "m_green_vs_blue": 22.536243438720703
+    },
+    {
+      "step": 385,
+      "m_green_vs_blue": 22.555641174316406
+    },
+    {
+      "step": 390,
+      "m_green_vs_blue": 22.587295532226562
+    },
+    {
+      "step": 395,
+      "m_green_vs_blue": 22.648094177246094
+    },
+    {
+      "step": 400,
+      "m_green_vs_blue": 22.726036071777344
+    },
+    {
+      "step": 405,
+      "m_green_vs_blue": 22.79436683654785
+    },
+    {
+      "step": 410,
+      "m_green_vs_blue": 22.86162567138672
+    },
+    {
+      "step": 415,
+      "m_green_vs_blue": 22.927356719970703
+    },
+    {
+      "step": 420,
+      "m_green_vs_blue": 22.981948852539062
+    },
+    {
+      "step": 425,
+      "m_green_vs_blue": 23.02069854736328
+    },
+    {
+      "step": 430,
+      "m_green_vs_blue": 23.05120849609375
+    },
+    {
+      "step": 435,
+      "m_green_vs_blue": 23.07805061340332
+    },
+    {
+      "step": 440,
+      "m_green_vs_blue": 23.118637084960938
+    },
+    {
+      "step": 445,
+      "m_green_vs_blue": 23.15992546081543
+    },
+    {
+      "step": 450,
+      "m_green_vs_blue": 23.226699829101562
+    },
+    {
+      "step": 455,
+      "m_green_vs_blue": 23.289810180664062
+    },
+    {
+      "step": 460,
+      "m_green_vs_blue": 23.34869384765625
+    },
+    {
+      "step": 465,
+      "m_green_vs_blue": 23.384357452392578
+    },
+    {
+      "step": 470,
+      "m_green_vs_blue": 23.41575050354004
+    },
+    {
+      "step": 475,
+      "m_green_vs_blue": 23.44634246826172
+    },
+    {
+      "step": 480,
+      "m_green_vs_blue": 23.464069366455078
+    },
+    {
+      "step": 485,
+      "m_green_vs_blue": 23.486982345581055
+    },
+    {
+      "step": 490,
+      "m_green_vs_blue": 23.51243782043457
+    },
+    {
+      "step": 495,
+      "m_green_vs_blue": 23.531429290771484
+    },
+    {
+      "step": 499,
+      "m_green_vs_blue": 23.551671981811523
+    }
+  ],
+  "low_persistence_with_steering": [
+    {
+      "step": 0,
+      "m_green_vs_blue": -2.059833526611328
+    },
+    {
+      "step": 5,
+      "m_green_vs_blue": -0.043215394020080566
+    },
+    {
+      "step": 10,
+      "m_green_vs_blue": 1.1503663063049316
+    },
+    {
+      "step": 15,
+      "m_green_vs_blue": 1.3715684413909912
+    },
+    {
+      "step": 20,
+      "m_green_vs_blue": 1.6102640628814697
+    },
+    {
+      "step": 25,
+      "m_green_vs_blue": 2.4979653358459473
+    },
+    {
+      "step": 30,
+      "m_green_vs_blue": 3.2067532539367676
+    },
+    {
+      "step": 35,
+      "m_green_vs_blue": 3.2153561115264893
+    },
+    {
+      "step": 40,
+      "m_green_vs_blue": 3.2849619388580322
+    },
+    {
+      "step": 45,
+      "m_green_vs_blue": 3.4518771171569824
+    },
+    {
+      "step": 50,
+      "m_green_vs_blue": 4.099198341369629
+    },
+    {
+      "step": 55,
+      "m_green_vs_blue": 4.317452907562256
+    },
+    {
+      "step": 60,
+      "m_green_vs_blue": 3.9562454223632812
+    },
+    {
+      "step": 65,
+      "m_green_vs_blue": 4.294973850250244
+    },
+    {
+      "step": 70,
+      "m_green_vs_blue": 4.792178153991699
+    },
+    {
+      "step": 75,
+      "m_green_vs_blue": 4.858641624450684
+    },
+    {
+      "step": 80,
+      "m_green_vs_blue": 5.073774337768555
+    },
+    {
+      "step": 85,
+      "m_green_vs_blue": 5.217906951904297
+    },
+    {
+      "step": 90,
+      "m_green_vs_blue": 5.488496780395508
+    },
+    {
+      "step": 95,
+      "m_green_vs_blue": 5.776142120361328
+    },
+    {
+      "step": 100,
+      "m_green_vs_blue": 5.978902816772461
+    },
+    {
+      "step": 105,
+      "m_green_vs_blue": 6.016959190368652
+    },
+    {
+      "step": 110,
+      "m_green_vs_blue": 6.041543006896973
+    },
+    {
+      "step": 115,
+      "m_green_vs_blue": 6.076869010925293
+    },
+    {
+      "step": 120,
+      "m_green_vs_blue": 6.124557971954346
+    },
+    {
+      "step": 125,
+      "m_green_vs_blue": 6.197452545166016
+    },
+    {
+      "step": 130,
+      "m_green_vs_blue": 6.291244983673096
+    },
+    {
+      "step": 135,
+      "m_green_vs_blue": 6.360909461975098
+    },
+    {
+      "step": 140,
+      "m_green_vs_blue": 6.405397891998291
+    },
+    {
+      "step": 145,
+      "m_green_vs_blue": 6.467473030090332
+    },
+    {
+      "step": 150,
+      "m_green_vs_blue": 6.529525279998779
+    },
+    {
+      "step": 155,
+      "m_green_vs_blue": 6.570762634277344
+    },
+    {
+      "step": 160,
+      "m_green_vs_blue": 6.639095306396484
+    },
+    {
+      "step": 165,
+      "m_green_vs_blue": 6.713710784912109
+    },
+    {
+      "step": 170,
+      "m_green_vs_blue": 6.780154705047607
+    },
+    {
+      "step": 175,
+      "m_green_vs_blue": 6.841159343719482
+    },
+    {
+      "step": 180,
+      "m_green_vs_blue": 6.893512725830078
+    },
+    {
+      "step": 185,
+      "m_green_vs_blue": 6.934200286865234
+    },
+    {
+      "step": 190,
+      "m_green_vs_blue": 6.9704155921936035
+    },
+    {
+      "step": 195,
+      "m_green_vs_blue": 6.997652530670166
+    },
+    {
+      "step": 200,
+      "m_green_vs_blue": 7.03095817565918
+    },
+    {
+      "step": 205,
+      "m_green_vs_blue": 7.0721235275268555
+    },
+    {
+      "step": 210,
+      "m_green_vs_blue": 7.1239166259765625
+    },
+    {
+      "step": 215,
+      "m_green_vs_blue": 7.175097465515137
+    },
+    {
+      "step": 220,
+      "m_green_vs_blue": 7.21104621887207
+    },
+    {
+      "step": 225,
+      "m_green_vs_blue": 7.239260673522949
+    },
+    {
+      "step": 230,
+      "m_green_vs_blue": 7.258402347564697
+    },
+    {
+      "step": 235,
+      "m_green_vs_blue": 7.277243614196777
+    },
+    {
+      "step": 240,
+      "m_green_vs_blue": 7.293127536773682
+    },
+    {
+      "step": 245,
+      "m_green_vs_blue": 7.310165882110596
+    },
+    {
+      "step": 250,
+      "m_green_vs_blue": 7.333403587341309
+    },
+    {
+      "step": 255,
+      "m_green_vs_blue": 7.363541603088379
+    },
+    {
+      "step": 260,
+      "m_green_vs_blue": 7.390618324279785
+    },
+    {
+      "step": 265,
+      "m_green_vs_blue": 7.415183067321777
+    },
+    {
+      "step": 270,
+      "m_green_vs_blue": 7.452544212341309
+    },
+    {
+      "step": 275,
+      "m_green_vs_blue": 7.47705078125
+    },
+    {
+      "step": 280,
+      "m_green_vs_blue": 7.499335765838623
+    },
+    {
+      "step": 285,
+      "m_green_vs_blue": 7.524455547332764
+    },
+    {
+      "step": 290,
+      "m_green_vs_blue": 7.548405647277832
+    },
+    {
+      "step": 295,
+      "m_green_vs_blue": 7.5697503089904785
+    },
+    {
+      "step": 300,
+      "m_green_vs_blue": 7.586638450622559
+    },
+    {
+      "step": 305,
+      "m_green_vs_blue": 7.603464603424072
+    },
+    {
+      "step": 310,
+      "m_green_vs_blue": 7.624997615814209
+    },
+    {
+      "step": 315,
+      "m_green_vs_blue": 7.64266300201416
+    },
+    {
+      "step": 320,
+      "m_green_vs_blue": 7.659570217132568
+    },
+    {
+      "step": 325,
+      "m_green_vs_blue": 7.676268577575684
+    },
+    {
+      "step": 330,
+      "m_green_vs_blue": 7.696051120758057
+    },
+    {
+      "step": 335,
+      "m_green_vs_blue": 7.713850975036621
+    },
+    {
+      "step": 340,
+      "m_green_vs_blue": 7.728473663330078
+    },
+    {
+      "step": 345,
+      "m_green_vs_blue": 7.7443695068359375
+    },
+    {
+      "step": 350,
+      "m_green_vs_blue": 7.758275985717773
+    },
+    {
+      "step": 355,
+      "m_green_vs_blue": 7.77625846862793
+    },
+    {
+      "step": 360,
+      "m_green_vs_blue": 7.795409679412842
+    },
+    {
+      "step": 365,
+      "m_green_vs_blue": 7.81703519821167
+    },
+    {
+      "step": 370,
+      "m_green_vs_blue": 7.839496612548828
+    },
+    {
+      "step": 375,
+      "m_green_vs_blue": 7.862525939941406
+    },
+    {
+      "step": 380,
+      "m_green_vs_blue": 7.877355575561523
+    },
+    {
+      "step": 385,
+      "m_green_vs_blue": 7.891597270965576
+    },
+    {
+      "step": 390,
+      "m_green_vs_blue": 7.906105041503906
+    },
+    {
+      "step": 395,
+      "m_green_vs_blue": 7.927788734436035
+    },
+    {
+      "step": 400,
+      "m_green_vs_blue": 7.949488639831543
+    },
+    {
+      "step": 405,
+      "m_green_vs_blue": 7.968777179718018
+    },
+    {
+      "step": 410,
+      "m_green_vs_blue": 7.986392021179199
+    },
+    {
+      "step": 415,
+      "m_green_vs_blue": 8.004218101501465
+    },
+    {
+      "step": 420,
+      "m_green_vs_blue": 8.022880554199219
+    },
+    {
+      "step": 425,
+      "m_green_vs_blue": 8.039340019226074
+    },
+    {
+      "step": 430,
+      "m_green_vs_blue": 8.052145004272461
+    },
+    {
+      "step": 435,
+      "m_green_vs_blue": 8.068889617919922
+    },
+    {
+      "step": 440,
+      "m_green_vs_blue": 8.084821701049805
+    },
+    {
+      "step": 445,
+      "m_green_vs_blue": 8.098062515258789
+    },
+    {
+      "step": 450,
+      "m_green_vs_blue": 8.113323211669922
+    },
+    {
+      "step": 455,
+      "m_green_vs_blue": 8.125197410583496
+    },
+    {
+      "step": 460,
+      "m_green_vs_blue": 8.136947631835938
+    },
+    {
+      "step": 465,
+      "m_green_vs_blue": 8.147266387939453
+    },
+    {
+      "step": 470,
+      "m_green_vs_blue": 8.156702041625977
+    },
+    {
+      "step": 475,
+      "m_green_vs_blue": 8.165277481079102
+    },
+    {
+      "step": 480,
+      "m_green_vs_blue": 8.172733306884766
+    },
+    {
+      "step": 485,
+      "m_green_vs_blue": 8.182855606079102
+    },
+    {
+      "step": 490,
+      "m_green_vs_blue": 8.195670127868652
+    },
+    {
+      "step": 495,
+      "m_green_vs_blue": 8.209526062011719
+    },
+    {
+      "step": 499,
+      "m_green_vs_blue": 8.221771240234375
+    }
+  ]
+}
