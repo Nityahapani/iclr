@@ -65,23 +65,41 @@ def run_cross_input_experiment(seed: int, run_name: str):
 
     h_A_by_input = {obj: get_hidden(model_A, obj) for obj in input_objects}
 
-    matrix = {}
+    # NOTE: at full patch strength (lambda=1), the target's own hidden state
+    # is entirely discarded, so matrix[x_i][x_j] is mathematically independent
+    # of x_i at lambda=1 -- this is a property of full replacement, not a
+    # target-identity effect. To make the target's identity meaningful, we
+    # test at a PARTIAL patch strength (lambda=0.5) as the primary matrix,
+    # where the target's own activation still contributes half the signal,
+    # alongside the lambda=1 case for reference.
+    matrix_partial = {}
+    matrix_full = {}
+    h_AB_by_target = {obj: get_hidden(model_AB_T, obj) for obj in input_objects}
     for x_i in input_objects:
-        matrix[x_i] = {}
+        matrix_partial[x_i] = {}
+        matrix_full[x_i] = {}
+        h_AB_i = h_AB_by_target[x_i]
         for x_j in input_objects:
             h_source = h_A_by_input[x_j]
-            curve = interpolated_patch_margin(model_AB_T, h_source, x_i, lambdas=[0.0, 1.0])
-            m_at_1 = curve[-1]["margin"]
-            matrix[x_i][x_j] = m_at_1
+            with torch.no_grad():
+                h_half = 0.5 * h_AB_i + 0.5 * h_source
+                logits_half = model_AB_T.fc2(h_half.unsqueeze(0))
+                m_half = (logits_half[0, COLOR2ID["blue"]] - logits_half[0, COLOR2ID["red"]]).item()
 
-    print(f"[{run_name}] cross-input matrix (rows=target x_i, cols=source direction x_j):")
+                logits_full = model_AB_T.fc2(h_source.unsqueeze(0))
+                m_full = (logits_full[0, COLOR2ID["blue"]] - logits_full[0, COLOR2ID["red"]]).item()
+            matrix_partial[x_i][x_j] = m_half
+            matrix_full[x_i][x_j] = m_full
+
+    print(f"[{run_name}] cross-input PARTIAL (lambda=0.5) matrix (rows=target x_i, cols=source direction x_j):")
     header = "target\\source".ljust(14) + "".join(f"{o:>12s}" for o in input_objects)
     print("  " + header)
     for x_i in input_objects:
-        row = f"{x_i:14s}" + "".join(f"{matrix[x_i][x_j]:12.3f}" for x_j in input_objects)
+        row = f"{x_i:14s}" + "".join(f"{matrix_partial[x_i][x_j]:12.3f}" for x_j in input_objects)
         print("  " + row)
 
-    result = {"run_name": run_name, "seed": seed, "input_objects": input_objects, "matrix": matrix}
+    result = {"run_name": run_name, "seed": seed, "input_objects": input_objects,
+               "matrix_partial_lambda0.5": matrix_partial, "matrix_full_lambda1.0": matrix_full}
     with open(f"/home/claude/iclr/results/cross_input_{run_name}.json", "w") as f:
         json.dump(result, f, indent=2, default=str)
     return result
@@ -98,7 +116,7 @@ if __name__ == "__main__":
     zor_diag = []
     zor_offdiag = []
     for r in results:
-        m = r["matrix"]
+        m = r["matrix_partial_lambda0.5"]
         zor_diag.append(m[SPECIAL_OBJECT][SPECIAL_OBJECT])
         for src in r["input_objects"]:
             if src != SPECIAL_OBJECT:
