@@ -1,0 +1,33 @@
+{
+  "run_name": "seed1237",
+  "seed": 1237,
+  "foreign_seed": 1238,
+  "matched_kl": 0.00010284251038683578,
+  "M_AB_own_theta_A": {
+    "m_T_normal": 9.026606559753418,
+    "m_patched": -7.622427940368652,
+    "m_A_own": -8.31767749786377,
+    "patch_restores_red": true,
+    "h_A_norm": 4.639864921569824,
+    "h_T_norm": 4.312541961669922,
+    "h_A_vs_h_T_cosine": 0.36389896273612976
+  },
+  "M_B_foreign_theta_A": {
+    "m_T_normal": 12.474185943603516,
+    "m_patched": 3.575479030609131,
+    "m_A_own": -8.479538917541504,
+    "patch_restores_red": false,
+    "h_A_norm": 3.9981703758239746,
+    "h_T_norm": 4.597839832305908,
+    "h_A_vs_h_T_cosine": 0.08721105754375458
+  },
+  "M_AB_foreign_theta_A": {
+    "m_T_normal": 9.026606559753418,
+    "m_patched": 1.2810990810394287,
+    "m_A_own": -8.479538917541504,
+    "patch_restores_red": false,
+    "h_A_norm": 3.9981703758239746,
+    "h_T_norm": 4.312541961669922,
+    "h_A_vs_h_T_cosine": -0.24296334385871887
+  }
+}
