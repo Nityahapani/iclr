@@ -547,3 +547,70 @@ Raw data: `results/logic_task_seed*.json`, `results/arch_generalization.json`,
 `results/arch_transformer_rerun.json`, `results/matched_control_test.json`.
 
 **Status: all three reopened experiments complete.** Ready for drafting.
+
+---
+
+## Counterfactual retraining experiment: persistence vs. reuse/repurposing
+
+Per reviewer request, tested the strongest possible claim directly: does
+ablating the model's newly-learned B mechanism *reveal* the old A behavior
+(not just move the margin), and does this happen in M_AB but NOT in a
+matched M_B control that never learned A? Full conditional matrix {none, A
+removed, B removed, A+B removed} computed for both populations at matched
+checkpoints, 7 seeds.
+
+**Strict result**: only 1/7 seeds cross the binary threshold (B-removal
+flipping the prediction back to "red"). Weaker than hoped.
+
+**Graded result, more informative and directly bears on the
+persistence-vs-reuse distinction raised by review**: removing B collapses
+the margin from strongly-blue (~9-13) to near-zero in every seed, in BOTH
+M_AB and M_B. But the **shift magnitude is systematically SMALLER in M_AB
+than in M_B** (mean 9.61 vs 12.07, 7/7 seeds, Wilcoxon p=0.016) — the
+opposite of what clean, independent persistence would predict. If A were
+intact as a separable circuit merely outvoted by B, removing B should
+reveal *more* red-like margin in M_AB (which has A to reveal) than in M_B
+(which has nothing there). Instead M_AB's B-removal effect is consistently
+*smaller*.
+
+### What this means for the paper's central claim
+
+This result argues against the strongest reading of the project's core
+claim. Three increasingly strong claims, and where the evidence now stands
+on each:
+
+| Claim | Evidence |
+|---|---|
+| The model no longer behaviorally expresses A | Yes — clean, replicated |
+| A phase-A-derived hidden direction (`J_A`) still causally affects output | Yes — `C_A`, LOSO-R²=0.98, permutation null all support this |
+| **The original A computation/mechanism itself remains intact as a separable circuit** | **Not established — this experiment argues against it** |
+
+The `J_A`-ablation results (Jacobian alignment, mediation effect, LOSO
+prediction) demonstrate that a phase-A-derived *direction* remains causally
+influential on the model's current output. They do **not** demonstrate that
+a separable A-*computation* persists underneath B and gets exposed when B is
+removed. The counterfactual matrix result is more consistent with
+**reuse/repurposing**: `J_B` (M_AB's own current blue-mechanism direction)
+appears to partially depend on or overlap with the same representational
+subspace `J_A` occupies — plausible given M_AB's weights were literally built
+by continuing training from θ_A, so B-training had every opportunity to
+repurpose rather than route around A's substrate. Ablating B in M_AB
+therefore does not cleanly "uncover" A underneath; it disrupts a
+representation that both mechanisms may partially share, and does so
+somewhat less dramatically than in M_B, where B's mechanism was built from
+scratch and appears more cleanly self-contained.
+
+**Revised claim for the paper**: the evidence supports *"a direction
+associated with the original computation remains causally influential on
+current behavior"* — the precise, intervention-tied wording already adopted
+per earlier review — but does **not** support the stronger claim that *"the
+original computation persists intact as a distinct, coexisting circuit."*
+This is an important downgrade from the "causal coexistence" framing
+explored in this experiment's original hypothesis, and should be stated as
+a limitation/open question rather than a confirmed finding. It also
+explains, retrospectively, why the interaction test (`Γ_AB`) found real,
+substantial interaction rather than clean additive independence — a shared
+substrate would produce exactly that pattern.
+
+Raw data: `results/counterfactual_matrix_seed*.json`,
+`results/counterfactual_matrix_summary.json`.
