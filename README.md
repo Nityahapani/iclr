@@ -984,29 +984,88 @@ correlation. The seed with the most erosion (seed 1236, `C_A`→-0.003) has
 (seed 1234, `C_A`→-2.22) has `readout_alignment`→0.91 (still strongly
 aligned).
 
-### Conclusion: repurposing, not preservation
+### Conclusion: consistent with repurposing, not with independent preservation
 
-This is the most decisive test in the project for distinguishing the three
-alternatives the reviewer laid out:
-1. frozen A representation + changing downstream gate — **rejected** (C1
-   shows the gate does not change; C3 shows gate change and `C_A` decay are
-   perfectly coupled, not independent).
-2. **co-adapted shared substrate — supported**, cleanly, by both conditions.
-3. genuinely preserved, causally separate A pathway — **rejected**,
-   consistent with the earlier counterfactual matrix finding.
+**Correction to the overstated wording used when this result was first
+found**: this experiment should not be described as "ruling out"
+preservation or "proving" repurposing on its own. With n=5 seeds, a
+Spearman ρ=1.0 is striking but is a small-sample correlation between two
+measurements of the same pathway (`C_A` is an ablation effect;
+`readout_alignment` is a static property of the same readout weights being
+ablated) — perfect correlation here is mechanistically suggestive, not an
+independent proof.
 
-**When `J_A` remains causally effective (C1, and high-persistence C3 seeds),
-it is because the current readout continues to genuinely rely on that
-direction — not because a separate historical circuit persists untouched.
-When causal accessibility erodes (C3), it erodes because the shared
-pathway itself is being dismantled, exactly in step with the readout's own
-drift away from it.** This unifies the project's central findings: the
-necessity+sufficiency patching results, the cross-lineage specificity, and
-the counterfactual matrix's argument against clean coexistence are all
-consistent with one coherent account — a persistent, causally load-bearing,
-lineage-specific, but *shared and co-adapted* representational substrate,
-not a dormant separate mechanism.
+**Uncertainty, reported honestly rather than leading with the bare
+correlation**: exact permutation test (all 120 orderings of 5 seeds) gives
+p=1/120≈0.0083 (the smallest attainable p-value at this n); bootstrap
+resampling gives a 95% CI of [1.0, 1.0], which reflects the ceiling effect
+of n=5 rather than implying unlimited precision. Raw seed-level pairs,
+reported in full rather than only the summary statistic:
 
-Raw data: `results/readout_alignment_C1_seed*.json`, `results/readout_alignment_C3_seed*.json`.
+| Seed | readout_alignment (final) | C_A (final) |
+|---|---|---|
+| 1234 | 0.913 | -2.222 |
+| 1235 | 0.312 | -0.250 |
+| 1236 | -0.037 | -0.003 |
+| 1237 | 0.475 | -0.571 |
+| 1238 | 0.888 | -1.711 |
 
-**Status: formalization and final discriminating test complete. Ready for drafting.**
+The scatter of these 5 points lies on a clean monotonic curve with no
+outliers — this visualization carries more information than the correlation
+coefficient alone.
+
+**The correct framing** is that this result is one piece of a *conjunction*
+of independent findings, not a standalone proof. The strongest argument for
+the paper is the combination:
+
+- behavioral reversal does not imply causal erasure, **and**
+- persistence is not the same as preservation of an independent circuit,
+
+and therefore the best-supported interpretation, across the whole body of
+evidence, is a co-adapted/repurposed causal substrate.
+
+### Mapping results onto three candidate mechanistic models
+
+| Candidate model | Distinguishing prediction | Empirical result |
+|---|---|---|
+| **Independent preservation** (A-pathway ⊕ B-pathway) | Removing B should expose an approximately intact A contribution | **Contradicted** by the counterfactual matrix (M_AB's B-removal shift is smaller than M_B's, 7/7 seeds, p=0.016) |
+| **Downstream-gate rotation** (A representation preserved, readout rotates) | Persistent A representation, but *changing* readout alignment over training | **Contradicted** by C1's stable alignment (0.999→0.986-0.989 across 3000 steps) |
+| **Co-adapted shared substrate** | Causal accessibility and downstream compatibility should co-vary | **Consistent** with both C1 (both stay high) and C3 (both decay together, seed-by-seed) |
+
+Supporting evidence against alternative confounds, from earlier in this project:
+
+| Alternative explanation | Result that weakens it |
+|---|---|
+| Historical direction is generic | Contradicted by the 7×7 cross-lineage matrix (p<0.000001, zero overlap) |
+| Effect is a diffuse hidden-state artifact | Contradicted by parallel-only vs orthogonal-only decomposition (7/7 vs 0/7) |
+| Effect is narrowly zor-specific | Weakened by cross-input transfer to `vex` (p=0.11, statistically indistinguishable from own) |
+| Jacobian construction is arbitrary | Weakened by A/B/C direction convergence (cos 0.67-0.98 pairwise, all three 7/7) |
+
+### Explicit falsification conditions (stated in advance, and tested against)
+
+- If `B_t` changed only when `P_A(t)` disappeared → no dissociation. *Not
+  observed*: `P_A(t)` stays large for thousands of steps after `B_t` flips.
+- If `P_A(t)` vanished immediately after the behavioral flip → no
+  persistence. *Not observed*: `t_flip ≪ t_erode` in every case tested.
+- If orthogonal hidden-state components restored A equally well → no
+  localization. *Not observed*: 0/7 seeds for orthogonal-only patching.
+- If foreign lineage directions worked as well as own directions → no
+  lineage specificity. *Not observed*: complete diagonal/off-diagonal
+  separation, p<0.000001.
+- If C3 showed no relationship between causal effect and pathway alignment →
+  repurposing interpretation weakened. *Not observed*: exact permutation
+  p=0.0083, clean monotonic scatter.
+
+### Three-state dissociation table
+
+| State | Behavioral state B_t | Causal accessibility P_A(t) | Recoverability R_A(t) |
+|---|---|---|---|
+| Phase A | A | high | high |
+| Early A→B (C1, any time) | B | high | high |
+| Eroded (C3, low-persistence seeds) | B | low | low |
+
+Raw data: `results/readout_alignment_C1_seed*.json`, `results/readout_alignment_C3_seed*.json`,
+`results/readout_alignment_uncertainty.json`.
+
+**Status: formalization, uncertainty quantification, and falsification
+framing complete. Ready for drafting.**
