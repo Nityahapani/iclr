@@ -900,3 +900,113 @@ downstream learning dynamics, and this experiment is the reason that
 scope boundary is drawn deliberately rather than by omission.
 
 Raw data: `results/relearning_2x2_pair*.json`, `results/relearning_2x2_all_pairs.json`.
+
+---
+
+## FORMALIZATION: three-quantity distinction and falsification criteria
+
+Per final review, the paper's core empirical discovery is formalized as a
+precise distinction between three properties of a trained network, which
+this project's results show are **not equivalent**.
+
+### Definitions
+
+- **Behavioral state**: `B_t = f_{θ_t}(x)` — the model's ordinary forward-pass
+  output at checkpoint t. This is what standard evaluation measures.
+- **Causal accessibility**: a persistence estimand,
+  `P_A(t) = Effect_{M_AB,t}(J_A) / Effect_{M_A}(J_A)`
+  — the ablation effect of the frozen, θ_A-derived direction `J_A` at
+  checkpoint t, normalized by its effect at θ_A itself (where the mechanism
+  is definitely live). This is exactly `frac_remaining` as used throughout
+  this project, given a precise name and estimand status.
+- **Behavioral recoverability**: `R_A(t) = f_{θ_t}(Patch(h_t, h_A ∥ J_A))`
+  — the model's output when the θ_A-relevant component of the CURRENT
+  hidden state is replaced with θ_A's own value along `J_A`. This is
+  exactly the necessity+sufficiency patching result (the `own_parallel_only`
+  condition).
+
+### The central empirical claim, formalized
+
+Under ordinary training (C1): `B_t ≈ B` (behavior is confidently blue) while
+`P_A(t) ≫ 0` (causal accessibility remains large, and even grows) and
+`R_A(t) ≈ A` (patching in the A-relevant component reliably restores red,
+7/7 seeds). **Behavioral state, causal accessibility, and behavioral
+recoverability are dissociated.**
+
+Under weight decay (C3), a further dissociation appears over training time:
+`P_A(t) → 0` for some seeds, but only *after* `B_t` has already settled to
+`B` — the temporal characterization (t_flip always far earlier than any
+t_erode) establishes this ordering explicitly.
+
+**This three-way distinction — behavioral identity, causal accessibility,
+and behavioral recoverability are not equivalent properties of a trained
+network — is the paper's central conceptual contribution.**
+
+### Falsification
+
+This framework makes precise, falsifiable predictions, and the project's
+own results include genuine falsification attempts:
+- The formalization would be falsified if `P_A(t)` and `B_t` were always
+  observed to move together (i.e. if causal accessibility trivially tracked
+  behavior) — this was directly tested (temporal characterization) and
+  rejected: `P_A(t)` remains high for thousands of steps after `B_t` flips
+  under C1.
+- It would be falsified if `R_A(t)` failed to track `P_A(t)` (e.g. if
+  patching never restored behavior despite nonzero ablation effects) — this
+  was tested via the necessity+sufficiency decomposition and the patching
+  experiments; recoverability held reliably wherever accessibility was high.
+- The "genuinely preserved, causally separate A pathway" interpretation
+  (as opposed to repurposing) was directly attacked by the readout-alignment
+  experiment below and rejected in favor of a co-adapted-substrate account.
+
+## FINAL DECISIVE TEST: readout co-adaptation (repurposing vs. preservation)
+
+Per final review, tested whether `J_A` remains causally effective because
+the downstream readout stayed genuinely compatible with it (co-adapted
+shared substrate) versus because a separate A-pathway persists untouched
+underneath a rotating/gating readout. Tracked
+`readout_alignment(t) = cos(J_A, W_red(t) - W_blue(t))` — i.e. whether the
+model's OWN current output-layer weights continue to "listen" along `J_A`'s
+direction — alongside `C_A(t)`, across the full trajectory, for both C1 and
+C3, 5 seeds each.
+
+**C1**: `readout_alignment` stays essentially constant (0.999 → 0.986-0.989)
+across all 3000 B-training steps, while `C_A` grows in magnitude. The
+readout never rotates away from `J_A` — B's own mechanism continues routing
+through the same direction throughout training. This rules out "frozen A
+representation behind a rotating gate" for ordinary training.
+
+**C3**: `readout_alignment` decays **in lockstep** with `C_A`, seed by seed.
+Spearman correlation between final `readout_alignment` and final `|C_A|`
+across the 5 seeds = **exactly 1.000** (p<0.0001) — a perfect rank
+correlation. The seed with the most erosion (seed 1236, `C_A`→-0.003) has
+`readout_alignment`→-0.04 (orthogonal); the seed with the least erosion
+(seed 1234, `C_A`→-2.22) has `readout_alignment`→0.91 (still strongly
+aligned).
+
+### Conclusion: repurposing, not preservation
+
+This is the most decisive test in the project for distinguishing the three
+alternatives the reviewer laid out:
+1. frozen A representation + changing downstream gate — **rejected** (C1
+   shows the gate does not change; C3 shows gate change and `C_A` decay are
+   perfectly coupled, not independent).
+2. **co-adapted shared substrate — supported**, cleanly, by both conditions.
+3. genuinely preserved, causally separate A pathway — **rejected**,
+   consistent with the earlier counterfactual matrix finding.
+
+**When `J_A` remains causally effective (C1, and high-persistence C3 seeds),
+it is because the current readout continues to genuinely rely on that
+direction — not because a separate historical circuit persists untouched.
+When causal accessibility erodes (C3), it erodes because the shared
+pathway itself is being dismantled, exactly in step with the readout's own
+drift away from it.** This unifies the project's central findings: the
+necessity+sufficiency patching results, the cross-lineage specificity, and
+the counterfactual matrix's argument against clean coexistence are all
+consistent with one coherent account — a persistent, causally load-bearing,
+lineage-specific, but *shared and co-adapted* representational substrate,
+not a dormant separate mechanism.
+
+Raw data: `results/readout_alignment_C1_seed*.json`, `results/readout_alignment_C3_seed*.json`.
+
+**Status: formalization and final discriminating test complete. Ready for drafting.**
