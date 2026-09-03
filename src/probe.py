@@ -788,3 +788,91 @@ def similarity_matched_synthetic_activation(h_target: torch.Tensor, h_reference:
     sin_sim = (max(0.0, 1 - cos_sim ** 2)) ** 0.5
     h_synthetic = cos_sim * h_reference.norm() * h_target_unit + sin_sim * h_reference.norm() * dir_perp_unit
     return h_synthetic
+
+
+def surgically_destroy_component(model, object_name: str, J_A: torch.Tensor, alpha: float = 1.0):
+    """
+    PARAMETER-SPACE (not inference-time) intervention: permanently projects
+    out the component of `object_name`'s OWN embedding vector along J_A's
+    direction (projected into embedding space via the fc1 weight matrix's
+    pseudo-inverse action -- approximated here directly in embedding space
+    since fc1 is linear, so a shift in the embedding produces a
+    corresponding linear shift in h). This edits model.embed.weight
+    in-place, permanently, not just for one forward pass.
+
+    Concretely: since h = act(fc1([embed(obj); ctx_embed(ctx)])), and fc1 is
+    linear, we can find the embedding-space direction e_A such that moving
+    embed(obj) along e_A moves h (pre-activation) along J_A, by using
+    fc1's weight sub-block for the object-embedding slice. We then remove
+    that component from the object's stored embedding row directly.
+
+    Returns the modified model (in-place) and the removed component's norm,
+    for verification.
+    """
+    embed_dim = model.embed.embedding_dim
+    # fc1.weight: [hidden_dim, embed_dim + ctx_embed_dim]. The object-embedding
+    # sub-block is the first embed_dim columns.
+    W1_obj_block = model.fc1.weight[:, :embed_dim]  # [hidden_dim, embed_dim]
+
+    # J_A is defined in h-space (post fc1, pre or post activation depending
+    # on where it was taken -- here, per jacobian_of_margin, it's grad w.r.t.
+    # h AFTER the activation). To move it back through the activation
+    # nonlininearity exactly requires the local Jacobian of act(); as a
+    # tractable approximation (activation is tanh, roughly linear near small
+    # pre-activations, and this is a surgical ablation rather than a precise
+    # inverse), we map J_A into pre-activation space via the LOCAL tanh
+    # derivative diag(1 - h^2) evaluated at the object's CURRENT hidden state.
+    obj_id = torch.tensor([OBJ2ID[object_name]], dtype=torch.long)
+    ctx_id = torch.tensor([CTX2ID["CTX_RED"]], dtype=torch.long)
+    with torch.no_grad():
+        h_current = model.hidden(obj_id, ctx_id).squeeze(0)  # post-activation
+        local_deriv = 1 - h_current ** 2  # tanh'(z) = 1 - tanh(z)^2, evaluated at h itself
+        J_A_preact = J_A * local_deriv  # chain rule: dL/dz = dL/dh * dh/dz
+
+        # embedding-space direction: e_A such that W1_obj_block @ e_A ~ J_A_preact
+        # (least-squares direction via W1_obj_block^T, i.e. the direction in
+        # embedding space that MOST DIRECTLY produces movement along J_A_preact)
+        e_A = W1_obj_block.T @ J_A_preact  # [embed_dim]
+        e_A_unit = e_A / (e_A.norm() + 1e-9)
+
+        obj_idx = OBJ2ID[object_name]
+        current_embed = model.embed.weight[obj_idx].clone()
+        coeff = current_embed @ e_A_unit
+        removed_component = alpha * coeff * e_A_unit
+        model.embed.weight[obj_idx] -= removed_component
+
+    return model, removed_component.norm().item()
+
+
+def surgically_transplant_component(model, object_name: str, source_embed_row: torch.Tensor,
+                                      J_A: torch.Tensor, alpha: float = 1.0):
+    """
+    Reinsert ONLY the J_A-relevant component of a SOURCE embedding row
+    (e.g. theta_A's own embedding for this object, a foreign lineage's, or
+    a random/synthetic one) into the CURRENT model's embedding for
+    `object_name`, leaving everything else about the current model
+    (including the rest of its own embedding row) untouched. This is the
+    surgical "reinsert only the historical component" step.
+    """
+    embed_dim = model.embed.embedding_dim
+    W1_obj_block = model.fc1.weight[:, :embed_dim]
+    obj_id = torch.tensor([OBJ2ID[object_name]], dtype=torch.long)
+    ctx_id = torch.tensor([CTX2ID["CTX_RED"]], dtype=torch.long)
+
+    with torch.no_grad():
+        h_current = model.hidden(obj_id, ctx_id).squeeze(0)
+        local_deriv = 1 - h_current ** 2
+        J_A_preact = J_A * local_deriv
+        e_A = W1_obj_block.T @ J_A_preact
+        e_A_unit = e_A / (e_A.norm() + 1e-9)
+
+        obj_idx = OBJ2ID[object_name]
+        source_coeff = source_embed_row @ e_A_unit
+        component_to_insert = alpha * source_coeff * e_A_unit
+
+        # remove whatever component is currently there along e_A_unit, then add the source's
+        current_embed = model.embed.weight[obj_idx].clone()
+        current_coeff = current_embed @ e_A_unit
+        model.embed.weight[obj_idx] = model.embed.weight[obj_idx] - current_coeff * e_A_unit + component_to_insert
+
+    return model

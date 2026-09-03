@@ -1,0 +1,31 @@
+{
+  "run_name": "sanity_check",
+  "seed": 1234,
+  "foreign_seed": 1235,
+  "results": {
+    "M_AB": {
+      "m_before": 11.941112518310547,
+      "P_A_before": -10.938138484954834,
+      "m_after_destroy": -4.795604705810547,
+      "P_A_after_destroy": 6.034708261489868,
+      "removed_norm": 1.3867852687835693,
+      "transplant": {
+        "own_A": 8.790700912475586,
+        "foreign_A": 1.7998757362365723,
+        "random": 4.5975799560546875
+      }
+    },
+    "M_B": {
+      "m_before": 11.468239784240723,
+      "P_A_before": -1.3711376190185547,
+      "m_after_destroy": 8.875658988952637,
+      "P_A_after_destroy": -0.37082958221435547,
+      "removed_norm": 1.3091039657592773,
+      "transplant": {
+        "own_A": 10.81160831451416,
+        "foreign_A": 3.086545467376709,
+        "random": 4.482819557189941
+      }
+    }
+  }
+}
