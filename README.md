@@ -829,3 +829,74 @@ patching, complete cross-lineage separation, cross-input computation-level
 generality, explicit temporal phase separation, and convergence across
 three independently-constructed causal directions with one principled
 negative control (Direction D). Ready for drafting.
+
+---
+
+## Intervention -> recovery -> re-learning: does persistence affect future learning?
+
+Per reviewer request, tested whether hidden causal persistence (measured by
+`C_A`) predicts future relearning dynamics, given IDENTICAL current
+behavior. This is a genuinely different question from everything else in
+this project — a learning-dynamics test, not a static mechanistic probe.
+
+**Design**: constructed high-persistence (`C_A`≈-2.0) and low-persistence
+(`C_A`≈-0.4 to -0.6) M_AB checkpoints under weight decay, plus an M_B
+control, then used a bias-only calibration (`calibrate_hidden_to_target_margin`,
+adjusting only `fc2.bias` — never touching the hidden representation where
+persistence-relevant structure lives) to force all conditions to an
+*exactly identical* starting point on a genuinely new task (zor→green, a
+label never before produced). Continued training and compared loss
+trajectories (AUC over the first 100 steps as a scale-robust relearning-speed
+metric). Also tested a temporary steering intervention (inject the
+low-persistence model's own `J_A`-parallel component for 50 steps, then
+remove it).
+
+**First pass (single seed pair) found an apparent effect** — but a real
+confound was caught and fixed along the way (initial checkpoint-matching by
+training-step search left starting margins mismatched by up to 1.1, which
+alone could explain apparent speed differences; fixed via exact bias
+calibration). After the fix, the single-pair result still showed
+low-persistence learning ~3x faster (loss_AUC 21 vs 65).
+
+**Replication across 3 independent seed pairs: the effect does NOT
+replicate directionally.**
+
+| Pair | high_persistence | low_persistence | M_B_control |
+|---|---|---|---|
+| 1234hi / 1236lo | 65.30 | **20.94** (faster) | 66.16 |
+| 1238hi / 1236lo | **14.61** (faster) | 20.94 | 45.43 |
+| 1234hi / 1237lo | 65.30 | **76.79** (slower) | 66.16 |
+
+The direction flips across pairs — sometimes high-persistence learns
+faster, sometimes low-persistence does, sometimes the control is the
+outlier. This is a genuine, honest negative result: **no reliable evidence
+that `C_A`-measured causal persistence predicts future relearning speed**
+in this task family at this scale. The single-pair "finding" that
+motivated running the replication was very likely seed-specific noise
+(differences in the particular random initialization or filler
+configuration), not a real effect of persistence.
+
+**Separately, the temporary steering intervention shows a clean, consistent
+null result**: `low_persistence_with_steering` tracks `low_persistence`
+almost exactly in all 3 pairs (21.87 vs 20.94, 21.87 vs 20.94, 76.35 vs
+76.79) — transiently injecting the historical `J_A`-parallel component for
+50 steps during phase-C training produces no detectable change in
+subsequent learning dynamics, at this intervention strength and duration.
+
+### What this means for the paper
+
+This experiment does not extend the paper's claim into learning-dynamics
+territory. The mechanistic findings (causal ablation, necessity+sufficiency
+decomposition, cross-lineage specificity, cross-input generality, temporal
+phase separation, independent-direction convergence) all still stand — they
+concern what the network currently computes and what can be causally
+manipulated in a single forward pass. This experiment asked a categorically
+different question (does the hidden causal substrate influence *future
+optimization trajectories*) and found no evidence for it, despite an honest
+methodological effort including catching and fixing a real confound along
+the way. This should be reported as an explicit negative result / limitation
+— the paper's claims are about mechanism and current computation, not about
+downstream learning dynamics, and this experiment is the reason that
+scope boundary is drawn deliberately rather than by omission.
+
+Raw data: `results/relearning_2x2_pair*.json`, `results/relearning_2x2_all_pairs.json`.
