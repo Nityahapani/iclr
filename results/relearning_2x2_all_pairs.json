@@ -1,0 +1,68 @@
+{
+  "pair1_1234hi_1236lo": {
+    "high_persistence": {
+      "t_green_flip": 10,
+      "starting_margin": -2.5345170497894287,
+      "loss_AUC": 65.29761798679829
+    },
+    "low_persistence": {
+      "t_green_flip": 10,
+      "starting_margin": -2.522292375564575,
+      "loss_AUC": 20.940373353660107
+    },
+    "M_B_control": {
+      "t_green_flip": 10,
+      "starting_margin": -2.471635580062866,
+      "loss_AUC": 66.16012714803219
+    },
+    "low_persistence_with_steering": {
+      "t_green_flip": 10,
+      "starting_margin": -2.508791923522949,
+      "loss_AUC": 21.870677703991532
+    }
+  },
+  "pair2_1238hi_1236lo": {
+    "high_persistence": {
+      "t_green_flip": 5,
+      "starting_margin": -2.4978249073028564,
+      "loss_AUC": 14.608077993616462
+    },
+    "low_persistence": {
+      "t_green_flip": 10,
+      "starting_margin": -2.522292375564575,
+      "loss_AUC": 20.940373353660107
+    },
+    "M_B_control": {
+      "t_green_flip": 25,
+      "starting_margin": -2.4461474418640137,
+      "loss_AUC": 45.434727490860496
+    },
+    "low_persistence_with_steering": {
+      "t_green_flip": 10,
+      "starting_margin": -2.508791923522949,
+      "loss_AUC": 21.870677703991532
+    }
+  },
+  "pair3_1234hi_1237lo": {
+    "high_persistence": {
+      "t_green_flip": 10,
+      "starting_margin": -2.5345170497894287,
+      "loss_AUC": 65.29761798679829
+    },
+    "low_persistence": {
+      "t_green_flip": 20,
+      "starting_margin": -2.3082525730133057,
+      "loss_AUC": 76.78826153278351
+    },
+    "M_B_control": {
+      "t_green_flip": 10,
+      "starting_margin": -2.471635580062866,
+      "loss_AUC": 66.16012714803219
+    },
+    "low_persistence_with_steering": {
+      "t_green_flip": 20,
+      "starting_margin": -2.311753034591675,
+      "loss_AUC": 76.34986005723476
+    }
+  }
+}
