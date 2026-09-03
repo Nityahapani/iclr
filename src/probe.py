@@ -762,3 +762,29 @@ def J_A_readout_alignment(model_t, J_A: torch.Tensor):
         W = model_t.fc2.weight  # [num_classes, hidden_dim]
         readout_dir_t = W[COLOR2ID["red"]] - W[COLOR2ID["blue"]]
     return cosine_alignment(J_A, readout_dir_t)
+
+
+def similarity_matched_synthetic_activation(h_target: torch.Tensor, h_reference: torch.Tensor,
+                                              h_direction_source: torch.Tensor):
+    """
+    Construct a synthetic activation with the EXACT SAME cosine similarity to
+    h_target as h_reference has, but whose orthogonal component (relative to
+    h_target) is drawn from h_direction_source instead of h_reference's own
+    identity. Used to test whether a cross-input transfer effect is
+    explained by raw cosine similarity alone (in which case the synthetic
+    should match h_reference's effect) or by something specific to
+    h_reference's actual identity (in which case the synthetic should
+    differ, even at matched similarity).
+    """
+    cos_sim = cosine_alignment(h_target, h_reference)
+    h_target_unit = h_target / (h_target.norm() + 1e-9)
+
+    dir_perp = h_direction_source - (h_direction_source @ h_target_unit) * h_target_unit
+    dir_perp_norm = dir_perp.norm()
+    if dir_perp_norm < 1e-9:
+        return None  # direction source has no orthogonal component to work with
+    dir_perp_unit = dir_perp / dir_perp_norm
+
+    sin_sim = (max(0.0, 1 - cos_sim ** 2)) ** 0.5
+    h_synthetic = cos_sim * h_reference.norm() * h_target_unit + sin_sim * h_reference.norm() * dir_perp_unit
+    return h_synthetic
