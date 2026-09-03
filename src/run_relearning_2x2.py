@@ -179,11 +179,12 @@ def continue_on_phase_C(model, filler_mapping, steps=500, lr=0.005, seed=0, stee
     return trajectory
 
 
-def run_2x2_experiment():
+def run_2x2_experiment(high_seed=1234, low_seed=1236, control_seed=1234, run_label="default"):
     print("=" * 60)
-    print("Building persistence-matched checkpoints...")
+    print(f"Building persistence-matched checkpoints (high={high_seed}, low={low_seed})...")
     print("=" * 60)
-    checkpoints = build_persistence_matched_checkpoints()
+    checkpoints = build_persistence_matched_checkpoints(high_seed=high_seed, low_seed=low_seed,
+                                                          control_seed=control_seed)
 
     print("\n" + "=" * 60)
     print("Continuing all three on phase C (zor -> green)...")
@@ -212,10 +213,11 @@ def run_2x2_experiment():
     t_flip_steered = next((pt["step"] for pt in traj_steered if pt["m_green_vs_blue"] > 0), None)
     print(f"[low_persistence_with_steering] green-flip step = {t_flip_steered}")
 
-    with open("/home/claude/iclr/results/relearning_2x2.json", "w") as f:
+    with open(f"/home/claude/iclr/results/relearning_2x2_{run_label}.json", "w") as f:
         json.dump(results, f, indent=2, default=str)
 
-    print("\n=== SUMMARY: step at which m_green_vs_blue first crosses 0, and loss AUC(0-100) ===")
+    print(f"\n=== SUMMARY ({run_label}): step at which m_green_vs_blue first crosses 0, and loss AUC(0-100) ===")
+    summary = {}
     for label, traj in results.items():
         t = next((pt["step"] for pt in traj if pt["m_green_vs_blue"] > 0), None)
         steps_arr = np.array([pt["step"] for pt in traj if pt["step"] <= 100])
@@ -223,9 +225,32 @@ def run_2x2_experiment():
         auc_loss = np.trapezoid(loss_arr, steps_arr)
         m0 = traj[0]["m_green_vs_blue"]
         print(f"{label:35s}: t_green_flip={t}, starting_margin={m0:.3f}, loss_AUC(0-100)={auc_loss:.2f}")
+        summary[label] = {"t_green_flip": t, "starting_margin": m0, "loss_AUC": auc_loss}
 
-    return results
+    return summary
 
 
 if __name__ == "__main__":
-    run_2x2_experiment()
+    seed_pairs = [
+        (1234, 1236, 1234, "pair1_1234hi_1236lo"),
+        (1238, 1236, 1238, "pair2_1238hi_1236lo"),
+        (1234, 1237, 1234, "pair3_1234hi_1237lo"),
+    ]
+    all_summaries = {}
+    for high_s, low_s, ctrl_s, label in seed_pairs:
+        print("\n\n" + "#" * 70)
+        print(f"# SEED PAIR: {label}")
+        print("#" * 70)
+        summary = run_2x2_experiment(high_seed=high_s, low_seed=low_s, control_seed=ctrl_s, run_label=label)
+        all_summaries[label] = summary
+
+    print("\n\n" + "=" * 70)
+    print("=== CROSS-PAIR SUMMARY (loss_AUC per condition per pair) ===")
+    print("=" * 70)
+    for label, summary in all_summaries.items():
+        print(f"\n{label}:")
+        for cond, vals in summary.items():
+            print(f"  {cond:35s}: loss_AUC={vals['loss_AUC']:.2f}")
+
+    with open("/home/claude/iclr/results/relearning_2x2_all_pairs.json", "w") as f:
+        json.dump(all_summaries, f, indent=2, default=str)
