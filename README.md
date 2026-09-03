@@ -766,24 +766,62 @@ overlap across all 49 measurements. Lineage specificity = -2.81 std
 deviations. This is strong evidence against "generic representational
 reuse" and for genuine lineage-specific causal persistence.
 
-### #2: Cross-input causal transfer matrix
+### #2: Cross-input causal transfer matrix — RE-AUDITED, claim revised
 
-Tested whether `J_A`/`h_A` is narrowly specific to zor's own output or a
-genuine computation-level object, using `vex` (structurally analogous,
-same context rule as zor during phase A) and filler objects (fixed,
-context-independent, structurally unrelated) as additional inputs.
-**Nuanced, honest finding**: `J_A(zor)→zor` (mean=-8.10) and `J_A(vex)→zor`
-(mean=-8.38) are statistically indistinguishable (Wilcoxon p=0.11) — vex's
-activation restores zor's behavior essentially as well as zor's own does.
-`J_A(filler)→zor` is clearly different (mean=-13.68). This means the
-causal object is **not narrowly input-specific to zor** — it captures a
-shared context-dependent computation zor and vex both used identically
-during phase A — while remaining distinguishable from generic/unrelated
-inputs (fillers). (One implementation bug was caught and fixed during this
-experiment: full-strength patching, `λ=1`, mathematically discards the
-target's own identity by construction, which initially produced identical
-rows across all targets; fixed by reporting the `λ=0.5` partial-patch
-matrix as primary, where target identity remains meaningful.)
+Original test: patched `vex` (structurally analogous, same context rule as
+zor during phase A) and filler objects into zor's target slot on M_AB.
+`J_A(zor)→zor` (mean=-8.10) and `J_A(vex)→zor` (mean=-8.38) were
+statistically indistinguishable (Wilcoxon p=0.11), while `J_A(filler)→zor`
+was clearly different (mean=-13.68). This was **initially reported** as
+evidence that the causal object is "not narrowly input-specific to zor" and
+"captures a shared computational structure." (One implementation bug was
+also caught and fixed during this experiment: full-strength patching,
+`λ=1`, mathematically discards the target's own identity by construction,
+which initially produced identical rows across all targets; fixed by
+reporting the `λ=0.5` partial-patch matrix as primary.)
+
+**Per the sharpest scrutiny in review, this claim was re-audited and
+revised**, because zor and `vex` compute the IDENTICAL function during
+phase A (both governed by `CONTROL_CTX_MAPPING`), so their θ_A activations
+could simply be generically similar by construction — a confound the
+original test did not rule out. Confirmed directly: `cos(h_zor, h_vex) =
+0.93 ± 0.05` at θ_A across 7 seeds (a genuinely large raw similarity).
+
+**Re-audit design**: (1) added `fenn` (SHAM_OBJECT) — also context-
+dependent (same *kind* of computation) but computing a *different*
+function during the same phase-A window — as a same-kind-different-function
+control; (2) constructed a **similarity-matched synthetic activation**:
+a vector with the *exact same* cosine similarity to `h_zor` as `h_vex` has,
+but pointing in a direction derived from `fenn`'s identity instead of
+`vex`'s own, isolating "raw similarity" from "vex-specific identity" as
+independently manipulable variables.
+
+**Results, replicated across 7 seeds**:
+- `fenn` (different function, low similarity, cos≈0.11) **fails completely**
+  to transfer: 0/7 seeds restore red, mean=+2.27 (clearly blue). This rules
+  out the weakest alternative — not just any context-dependent activation
+  works.
+- The similarity-matched synthetic (same cosine to zor as `vex`, but
+  `fenn`-derived direction) **partially transfers**: mean=-6.66±0.87 —
+  much closer to `vex`/`own` than to `fenn`'s +2.27. **Most of the original
+  effect is explained by raw activation similarity alone.**
+- But `vex`'s actual identity still adds a real, consistent increment
+  beyond similarity: `m_vex` (-8.38±0.66) is stronger than the
+  similarity-matched synthetic (-6.66±0.87) in **7/7 seeds** (Wilcoxon
+  p=0.016).
+
+**Revised, more conservative claim**: the cross-input result should **not**
+be described as showing that `J_A` captures an abstract, input-general
+"shared computational structure." The correct, defensible statement is
+narrower: (a) the effect is not purely `zor`-specific — a different-function
+control (`fenn`) fails entirely, ruling out one alternative; (b) a
+substantial portion of the original `zor↔vex` transfer is attributable to
+`zor` and `vex` having highly similar θ_A activations by construction
+(same function, same training), which the original writeup did not
+disentangle; (c) there remains a smaller but statistically reliable
+`vex`-identity-specific component beyond similarity alone. This is a
+genuine partial confound, caught and reported honestly rather than left in
+the stronger original form.
 
 ### #3: Temporal characterization (behavioral suppression → persistence/erosion)
 
@@ -1038,7 +1076,7 @@ Supporting evidence against alternative confounds, from earlier in this project:
 |---|---|
 | Historical direction is generic | Contradicted by the 7×7 cross-lineage matrix (p<0.000001, zero overlap) |
 | Effect is a diffuse hidden-state artifact | Contradicted by parallel-only vs orthogonal-only decomposition (7/7 vs 0/7) |
-| Effect is narrowly zor-specific | Weakened by cross-input transfer to `vex` (p=0.11, statistically indistinguishable from own) |
+| Effect is narrowly zor-specific | Partially weakened: `fenn` (different function) fails completely (0/7), but re-audit found most of the `zor↔vex` transfer is explained by raw activation similarity (cos≈0.93 by construction), not abstract shared computation — see re-audit below |
 | Jacobian construction is arbitrary | Weakened by A/B/C direction convergence (cos 0.67-0.98 pairwise, all three 7/7) |
 
 ### Explicit falsification conditions (stated in advance, and tested against)
