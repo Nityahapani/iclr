@@ -823,6 +823,20 @@ disentangle; (c) there remains a smaller but statistically reliable
 genuine partial confound, caught and reported honestly rather than left in
 the stronger original form.
 
+**Quantitative decomposition** (n=7 seeds, mean ± std):
+
+$$ \text{transfer}(\text{vex}) = \underbrace{-6.66 \pm 0.87}_{\text{similarity-mediated}} + \underbrace{-1.72 \pm 0.96}_{\text{identity-specific residual}} = \underbrace{-8.38 \pm 0.65}_{\text{total}} $$
+
+Approximately **79% of the transfer effect is similarity-mediated**, and
+**21% is an identity-specific residual** that survives similarity-matching
+and replicates in 7/7 seeds (p=0.016). The defensible claim: *computation is
+partially shared but partially identity-bound* — not "the historical
+component is a generally reusable old-task circuit" (too strong, contradicted
+by the decomposition) and not "the effect is purely input-specific to zor"
+(also too strong, contradicted by `fenn`'s complete failure providing a
+useful negative boundary — its value is precisely that it stays negative,
+so no further effort was spent trying to make it positive).
+
 ### #3: Temporal characterization (behavioral suppression → persistence/erosion)
 
 Reused existing dense trajectory data (no new training). **C1 (ordinary
