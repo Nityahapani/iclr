@@ -734,3 +734,31 @@ def calibrate_hidden_to_target_margin(model, object_name: str, ctx_name: str,
         delta = target_margin - current_margin
         model.fc2.bias[target_idx] += delta
     return model
+
+
+def J_A_readout_alignment(model_t, J_A: torch.Tensor):
+    """
+    Tests whether J_A remains aligned with the model's CURRENT downstream
+    readout direction (the red-vs-blue row difference of fc2), at any
+    checkpoint t. This distinguishes:
+      1. frozen A representation + changing downstream gate: J_A stays
+         fixed (by construction), but W_out(t) rotates away from it ->
+         alignment should DECAY over B-training.
+      2. co-adapted shared substrate: J_A and W_out(t) remain aligned
+         throughout (the readout continues to "listen" to J_A's direction,
+         because B's own mechanism partially routes through it) ->
+         alignment stays roughly CONSTANT/HIGH.
+      3. genuinely preserved A pathway, causally inert to B's readout:
+         would predict near-zero alignment with the CURRENT readout (B
+         doesn't use this direction at all) while J_A ablation still has an
+         effect via some OTHER route -- this pattern would be unusual and
+         itself informative if seen.
+
+    Returns cosine alignment between J_A (frozen, unit-normalized) and the
+    CURRENT readout's red-vs-blue direction, W_red(t) - W_blue(t), from
+    model_t's OWN fc2 weight matrix at this checkpoint.
+    """
+    with torch.no_grad():
+        W = model_t.fc2.weight  # [num_classes, hidden_dim]
+        readout_dir_t = W[COLOR2ID["red"]] - W[COLOR2ID["blue"]]
+    return cosine_alignment(J_A, readout_dir_t)
