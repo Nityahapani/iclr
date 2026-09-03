@@ -706,3 +706,31 @@ def direction_D_disjoint_inputs(model_A, ctx_name: str = "CTX_RED"):
         loss = F.binary_cross_entropy_with_logits(logits, is_red)
         opt.zero_grad(); loss.backward(); opt.step()
     return v.detach().clone()
+
+
+def calibrate_hidden_to_target_margin(model, object_name: str, ctx_name: str,
+                                        target_class: str, ref_class: str, target_margin: float,
+                                        n_steps: int = 200, lr: float = 0.1):
+    """
+    Adjust ONLY the model's fc2 bias terms for target_class/ref_class (a
+    minimal, generic recalibration of the readout, not touching fc1/hidden
+    representations at all) so that model's CURRENT margin(target_class,
+    ref_class) on `object_name` equals target_margin exactly. This isolates
+    "starting point on the new task" as a controlled variable, fully
+    decoupled from the model's internal representation/persistence level,
+    which lives entirely upstream in fc1/hidden and is untouched by this
+    calibration.
+    """
+    obj_id = torch.tensor([OBJ2ID[object_name]], dtype=torch.long)
+    ctx_id = torch.tensor([CTX2ID[ctx_name]], dtype=torch.long)
+    target_idx = COLOR2ID[target_class]
+    ref_idx = COLOR2ID[ref_class]
+
+    # simple bias-only calibration: adjust fc2.bias[target_idx] directly via
+    # closed form (no optimization needed, single scalar target)
+    with torch.no_grad():
+        logits = model(obj_id, ctx_id)
+        current_margin = (logits[0, target_idx] - logits[0, ref_idx]).item()
+        delta = target_margin - current_margin
+        model.fc2.bias[target_idx] += delta
+    return model
