@@ -1182,3 +1182,35 @@ derived from, and does not transfer to arbitrary same-kind-different-
 function computations.* This is a substantially more precise and
 defensible claim than "the historical direction generalizes," and it is
 the paper's actual mechanistic contribution.
+
+---
+
+## Consolidated alternative-explanations table
+
+Not a new experiment — a synthesis of what each control across this project
+rules out. This is arguably the strongest single piece of evidence for the
+paper's credibility: it shows the empirical program was structured to
+falsify plausible alternatives, not just to collect positive interventions.
+
+| Alternative explanation | Result | Interpretation |
+|---|---|---|
+| Historical component is gone immediately after B-training | ❌ Rejected | `t_flip ≪ t_erode` in every case tested; `C_A`/`P_A` stays large for thousands of steps after behavior flips — causal persistence survives the behavioral flip |
+| Any direction of similar magnitude works (generic perturbation) | ❌ Rejected | Matched-norm random directions produce far weaker, inconsistent effects than `J_A` |
+| Any A-like / context-dependent direction works | ❌ Rejected | `fenn` (context-dependent, different function) fails completely, 0/7 seeds |
+| Effect is just generic red-vs-blue linear separability | ❌ Rejected | Direction D (probe fit only on disjoint filler inputs, never touching zor) produces essentially zero ablation effect, 0/5 seeds |
+| The whole historical hidden state is required (diffuse artifact) | ❌ Rejected | The `J_A`-parallel component alone reproduces the full restoration effect (CI overlaps the full-state result almost exactly); the orthogonal remainder alone produces zero restoration, 0/7 |
+| Jacobian construction is an arbitrary/idiosyncratic artifact | ❌ Rejected | Three independently-motivated constructions (margin gradient, loss gradient, paired activation difference) converge, all 7/7 |
+| Any lineage's historical component works equally well | ❌ Rejected | 7×7 cross-lineage matrix: complete separation between own-lineage and all 42 foreign pairs, p<0.000001 |
+| Transfer to structurally-similar inputs (`vex`) is purely identity-specific | ❌ Rejected | A similarity-matched synthetic control shows ~79% of the transfer is explained by raw activation similarity alone |
+| Transfer to `vex` is purely similarity-driven (no real identity effect) | ❌ Rejected | A statistically reliable identity-specific residual survives similarity-matching, 7/7 seeds, p=0.016 |
+| Persistent causal accessibility necessarily changes future learning (hysteresis) | ❌ Rejected | The intervention→recovery→relearning experiment found no replicable directional effect across 3 seed pairs; explicitly scoped out of the paper's claims |
+| The old computation remains intact as a separate, merely-gated circuit | Weakened / contradicted | The counterfactual matrix shows B-removal does not cleanly re-derive A's activation (opposite of the predicted pattern); readout-alignment co-varies with causal accessibility rather than staying fixed while a gate rotates |
+| A separate A-pathway persists independent of the current readout | Weakened / contradicted | Readout alignment tracks causal accessibility (perfect rank correlation across 5 seeds under weight decay, though reported with appropriate small-n caveats) — consistent with a co-adapted shared substrate, not an independently preserved circuit |
+
+Each row corresponds to a preregistered test with an outcome that was not
+assumed in advance — several (the `wd=0.12` false positive, the `I_AB`
+tautology, the cross-input over-claim) were caught, corrected, and
+documented rather than left in a more favorable but inaccurate form.
+
+**Status: empirical section complete. All planned controls run, reported,
+and synthesized. Ready for drafting.**
