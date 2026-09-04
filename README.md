@@ -1121,3 +1121,64 @@ Raw data: `results/readout_alignment_C1_seed*.json`, `results/readout_alignment_
 
 **Status: formalization, uncertainty quantification, and falsification
 framing complete. Ready for drafting.**
+
+---
+
+## Scope boundary: accessibility and recoverability, not parameter-level necessity
+
+An additional experiment was attempted (causal resurrection via parameter-
+space surgical destroy-then-transplant on zor's embedding) to add
+parameter-level necessity to the evidence base, alongside the existing
+sufficiency result. **It did not converge cleanly**: even with iterative
+re-linearization, `P_A` (the ablation-based causal accessibility measure)
+behaved non-monotonically as the embedding was edited — it crossed zero
+briefly, then diverged in the opposite direction rather than settling near
+zero. This was diagnosed as a real structural difficulty at this model
+scale (the ablation-and-readout composition that defines `P_A` is not a
+simple linear function of the embedding, even locally), not a tuning
+problem, and the experiment was dropped rather than forced to "work."
+
+**This is not a gap in the paper's evidence — it defines a precise scope
+boundary.** The existing evidence base already establishes causal
+accessibility and behavioral recoverability with unusual strength:
+7/7-seed own-lineage hidden-state restoration; 7/7-seed parallel-only
+sufficiency with 0/7 for the orthogonal remainder; complete cross-lineage
+separation (p<0.000001); temporal dissociation between behavioral flip and
+causal erosion; LOSO prediction (R²=0.98) validated against an exact
+permutation null; and replication across an independent task family and
+two MLP scales. **The paper's claim is precisely scoped to causal
+accessibility and behavioral recoverability — it does not claim
+parameter-level necessity of the historical component**, and this
+distinction is stated explicitly rather than implied.
+
+### The mechanistic progression, stated explicitly
+
+The paper's central mechanistic argument follows a clean logical
+progression, best read in this order:
+
+1. **Can the historical component transfer at all?** Own-lineage
+   activation patching: yes, reliably (7/7 seeds).
+2. **Is this lineage-specific, or would any similarly-trained model's
+   direction do?** Cross-lineage transplantation matrix: own lineage is
+   dramatically and completely separated from all 42 foreign-lineage pairs
+   (p<0.000001) — genuinely lineage-specific, not generic.
+3. **Within one lineage, does the effect require the exact same input
+   (zor), or does it reflect a more general computation?** Cross-input
+   transfer to `vex` (a structurally analogous, same-function object):
+   *mostly* explained by raw activation similarity (~79% of the effect,
+   confirmed via a similarity-matched synthetic control), but with a
+   smaller, replicated (7/7 seeds, p=0.016), identity-specific residual
+   (~21%) beyond similarity alone.
+4. **Does arbitrary shared "context-dependence" transfer, or does it need
+   to be the same function?** `fenn` (context-dependent, but a *different*
+   function) provides the negative boundary: complete failure to transfer
+   (0/7). Its value is precisely that it stays negative — no further effort
+   was spent trying to make it positive.
+
+Read together: *the historical component transfers, but only under
+structured conditions — it is lineage-specific, mostly but not entirely
+explained by representational similarity to the specific input it was
+derived from, and does not transfer to arbitrary same-kind-different-
+function computations.* This is a substantially more precise and
+defensible claim than "the historical direction generalizes," and it is
+the paper's actual mechanistic contribution.
