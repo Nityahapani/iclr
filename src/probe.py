@@ -886,3 +886,60 @@ def surgically_transplant_component(model, object_name: str, source_embed_row: t
         model.embed.weight[obj_idx] = model.embed.weight[obj_idx] - current_coeff * e_A_unit + component_to_insert
 
     return model
+
+
+def decompose_shared_and_specific(J_A: torch.Tensor, J_B: torch.Tensor):
+    """
+    Decompose the 2D subspace spanned by {J_A, J_B} into:
+      - a SHARED component: the direction each retains in common, operationalized
+        as the (normalized) SUM of the two unit vectors, u_A + u_B (bisector of
+        the angle between them) -- the natural "common direction" when the two
+        vectors are not orthogonal.
+      - an A-SPECIFIC component: the part of J_A orthogonal to the shared direction.
+      - a B-SPECIFIC component: the part of J_B orthogonal to the shared direction.
+    This is a natural, symmetric, non-arbitrary decomposition: if J_A == J_B,
+    the shared component IS that direction and both specific components are
+    zero; if J_A and J_B are orthogonal, the "shared" bisector is a genuine
+    compromise direction and both specific components carry most of the norm.
+    """
+    u_A = J_A / (J_A.norm() + 1e-9)
+    u_B = J_B / (J_B.norm() + 1e-9)
+    shared_raw = u_A + u_B
+    shared_norm = shared_raw.norm()
+    if shared_norm < 1e-6:
+        # J_A and J_B are nearly anti-parallel; shared direction is degenerate.
+        # Fall back to using u_A itself as a shared reference (arbitrary but
+        # documented) -- in practice this should be checked and flagged.
+        shared_unit = u_A
+    else:
+        shared_unit = shared_raw / shared_norm
+
+    A_specific = J_A - (J_A @ shared_unit) * shared_unit
+    B_specific = J_B - (J_B @ shared_unit) * shared_unit
+
+    return shared_unit, A_specific, B_specific
+
+
+def ablate_direction_and_margin(model, object_name: str, direction: torch.Tensor,
+                                  target_class: str, ref_class: str, ctx_name: str = "CTX_RED",
+                                  alpha: float = 1.0):
+    """Generic single-direction ablation, returns the (target-ref) margin
+    change, for use with any of shared/A-specific/B-specific directions and
+    any target/ref class pair (so it can measure BOTH 'A accessibility'
+    i.e. red-vs-blue margin change AND 'B accessibility' i.e. blue-vs-red
+    margin change with the same mechanism)."""
+    obj_id = torch.tensor([OBJ2ID[object_name]], dtype=torch.long)
+    ctx_id = torch.tensor([CTX2ID[ctx_name]], dtype=torch.long)
+    target_idx = COLOR2ID[target_class]
+    ref_idx = COLOR2ID[ref_class]
+    with torch.no_grad():
+        h = model.hidden(obj_id, ctx_id).squeeze(0)
+        logits_normal = model.fc2(h.unsqueeze(0))
+        m_normal = (logits_normal[0, target_idx] - logits_normal[0, ref_idx]).item()
+
+        d_norm_sq = (direction @ direction) + 1e-9
+        coeff = (direction @ h) / d_norm_sq
+        h_ablated = h - alpha * coeff * direction
+        logits_ablated = model.fc2(h_ablated.unsqueeze(0))
+        m_ablated = (logits_ablated[0, target_idx] - logits_ablated[0, ref_idx]).item()
+    return m_ablated - m_normal
