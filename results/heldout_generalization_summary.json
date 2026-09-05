@@ -1,0 +1,22 @@
+{
+  "frac_blue_per_seed": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "frac_restore_per_seed": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "mean_frac_blue": 1.0,
+  "mean_frac_restore": 1.0
+}
