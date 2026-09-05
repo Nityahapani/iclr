@@ -1,0 +1,22 @@
+{
+  "run_name": "seed1234",
+  "seed": 1234,
+  "cos_J_A_J_B": -0.9885721206665039,
+  "shared_norm": 1.0,
+  "A_specific_norm": 3.7708053588867188,
+  "B_specific_norm": 4.186872482299805,
+  "matrix": {
+    "remove_A_specific": {
+      "A_accessibility_change": 11.511985778808594,
+      "B_accessibility_change": -11.511985778808594
+    },
+    "remove_B_specific": {
+      "A_accessibility_change": 11.511985540390015,
+      "B_accessibility_change": -11.511985540390015
+    },
+    "remove_shared": {
+      "A_accessibility_change": 0.44739818572998047,
+      "B_accessibility_change": -0.44739818572998047
+    }
+  }
+}
