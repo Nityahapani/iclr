@@ -943,3 +943,85 @@ def ablate_direction_and_margin(model, object_name: str, direction: torch.Tensor
         logits_ablated = model.fc2(h_ablated.unsqueeze(0))
         m_ablated = (logits_ablated[0, target_idx] - logits_ablated[0, ref_idx]).item()
     return m_ablated - m_normal
+
+
+def multi_statistic_matched_search(model_A, h_zor: torch.Tensor, h_vex: torch.Tensor,
+                                     h_fenn: torch.Tensor, J_A: torch.Tensor,
+                                     n_candidates: int = 2000, seed: int = 0):
+    """
+    Strengthened similarity-matched control: rather than matching ONLY
+    cosine similarity to h_zor (as in similarity_matched_synthetic_activation),
+    search over many candidate directions built from h_fenn's orthogonal
+    structure at different mixing angles, and select the one that
+    SIMULTANEOUSLY matches h_vex most closely on FOUR statistics:
+      1. cosine similarity to h_zor
+      2. norm (activation magnitude)
+      3. margin (red-vs-blue logit difference at theta_A -- a proxy for
+         distance to the decision boundary)
+      4. local Jacobian cosine similarity (does moving away from this
+         activation change the red/blue decision in a similarly-oriented
+         way to how it changes at h_vex?)
+    This directly addresses the concern that single-dimension (cosine-only)
+    matching leaves room for the residual to be explained by an unmatched
+    second-order statistic rather than genuine identity-specificity.
+    """
+    cos_target = cosine_alignment(h_zor, h_vex)
+    norm_target = h_vex.norm().item()
+    with torch.no_grad():
+        logits_vex = model_A.fc2(h_vex.unsqueeze(0))
+        margin_target = (logits_vex[0, COLOR2ID["red"]] - logits_vex[0, COLOR2ID["blue"]]).item()
+
+    # local Jacobian AT h_vex (grad of red-blue margin w.r.t. h, evaluated at h_vex directly,
+    # using the model's CURRENT fc2 -- a local linear approximation of decision sensitivity there)
+    h_vex_grad_input = h_vex.clone().detach().requires_grad_(True)
+    logits_vex_g = model_A.fc2(h_vex_grad_input.unsqueeze(0))
+    margin_vex_g = logits_vex_g[0, COLOR2ID["red"]] - logits_vex_g[0, COLOR2ID["blue"]]
+    J_vex_local = torch.autograd.grad(margin_vex_g, h_vex_grad_input)[0]
+
+    h_target_unit = h_zor / (h_zor.norm() + 1e-9)
+    fenn_perp = h_fenn - (h_fenn @ h_target_unit) * h_target_unit
+    if fenn_perp.norm() < 1e-9:
+        return None
+    fenn_perp_unit = fenn_perp / fenn_perp.norm()
+
+    g = torch.Generator().manual_seed(seed)
+    best_candidate = None
+    best_score = float("inf")
+    sin_target = (max(0.0, 1 - cos_target ** 2)) ** 0.5
+
+    for _ in range(n_candidates):
+        # perturb the orthogonal direction slightly around fenn_perp_unit to
+        # search for a candidate matching all four statistics simultaneously,
+        # while keeping cosine similarity to h_zor and norm EXACTLY matched
+        # (these two are enforced by construction; margin and Jacobian
+        # similarity are what we search over via small random rotations of
+        # the orthogonal component)
+        noise = torch.randn(fenn_perp_unit.shape[0], generator=g) * 0.3
+        candidate_perp_raw = fenn_perp_unit + noise
+        candidate_perp_unit = candidate_perp_raw / (candidate_perp_raw.norm() + 1e-9)
+
+        h_candidate = cos_target * norm_target * h_target_unit + sin_target * norm_target * candidate_perp_unit
+
+        with torch.no_grad():
+            logits_c = model_A.fc2(h_candidate.unsqueeze(0))
+            margin_c = (logits_c[0, COLOR2ID["red"]] - logits_c[0, COLOR2ID["blue"]]).item()
+
+        h_c_grad = h_candidate.clone().detach().requires_grad_(True)
+        logits_c_g = model_A.fc2(h_c_grad.unsqueeze(0))
+        margin_c_g = logits_c_g[0, COLOR2ID["red"]] - logits_c_g[0, COLOR2ID["blue"]]
+        J_c_local = torch.autograd.grad(margin_c_g, h_c_grad)[0]
+        jac_cos = cosine_alignment(J_c_local, J_vex_local)
+
+        margin_gap = abs(margin_c - margin_target)
+        jac_gap = abs(jac_cos - 1.0)  # want jac_cos close to 1 (matched)
+        score = margin_gap + 5.0 * jac_gap  # weight jacobian match more heavily
+
+        if score < best_score:
+            best_score = score
+            best_candidate = h_candidate.detach().clone()
+
+    return {
+        "h_candidate": best_candidate,
+        "cos_target": cos_target, "norm_target": norm_target, "margin_target": margin_target,
+        "best_score": best_score,
+    }
