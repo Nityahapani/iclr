@@ -1,0 +1,9 @@
+{
+  "m_vex_mean": -8.379630020686559,
+  "m_synthetic_v2_mean": -7.7150517872401645,
+  "residual_mean": -0.6645782334463937,
+  "residual_std": 0.31640001756841357,
+  "wilcoxon_p": 0.015625,
+  "n_residual_negative": 7,
+  "n_total": 7
+}
