@@ -1,0 +1,1430 @@
+[
+  {
+    "seed": 1234,
+    "status": "OK",
+    "scratch_blue": true,
+    "SS1": {
+      "cos_colA_colAB": 0.8357,
+      "cos_colA_colScr": 0.1054,
+      "cos_colAB_colScr": 0.0536,
+      "preact_abl_delta_AB": -8.5404,
+      "preact_ctrl_delta_AB": -0.1154,
+      "preact_abl_delta_scratch": -0.2732,
+      "specificity_AB": 74.03,
+      "AB_vs_scratch_ratio": 31.27
+    },
+    "SS2": {
+      "mAB": {
+        "m_nat_red_blue": -12.0802,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -6.7655,
+            "shift": 5.3147,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -9.9662,
+            "shift": 2.114,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -12.0802,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -13.3379,
+            "shift": -1.2577,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -14.0713,
+            "shift": -1.9911,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -14.6003,
+            "shift": -2.5201,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": -14.3246,
+            "shift": -2.2444,
+            "pred_red": false
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": 1.2546
+          },
+          {
+            "alpha": -2,
+            "shift": 0.3256
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": 0.5392
+          },
+          {
+            "alpha": 4,
+            "shift": 1.6561
+          },
+          {
+            "alpha": 8,
+            "shift": 3.4115
+          },
+          {
+            "alpha": 16,
+            "shift": 5.6547
+          }
+        ],
+        "shift_at_alpha8": -2.5201,
+        "ctrl_at_alpha8": 3.4115,
+        "recovers_red_at8": false
+      },
+      "scratch": {
+        "m_nat_red_blue": -14.6884,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -12.4946,
+            "shift": 2.1938,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -13.9927,
+            "shift": 0.6956,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -14.6884,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -14.6108,
+            "shift": 0.0776,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -13.742,
+            "shift": 0.9464,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -10.4584,
+            "shift": 4.23,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": -7.4414,
+            "shift": 7.247,
+            "pred_red": false
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": 2.1225
+          },
+          {
+            "alpha": -2,
+            "shift": 0.7617
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": -0.1511
+          },
+          {
+            "alpha": 4,
+            "shift": 0.3138
+          },
+          {
+            "alpha": 8,
+            "shift": 2.328
+          },
+          {
+            "alpha": 16,
+            "shift": 5.1101
+          }
+        ],
+        "shift_at_alpha8": 4.23,
+        "ctrl_at_alpha8": 2.328,
+        "recovers_red_at8": false
+      }
+    },
+    "SS3": {
+      "mAB_transplant": {
+        "pred_blue": true,
+        "m_nat": 9.4351,
+        "abl_delta": -7.0493,
+        "ctrl_delta": -0.0765,
+        "specificity": 92.16
+      },
+      "mSCR_transplant": {
+        "pred_blue": true,
+        "m_nat": 10.7724,
+        "abl_delta": -0.1288,
+        "ctrl_delta": -0.0525,
+        "specificity": 2.46
+      }
+    },
+    "SS4": {
+      "NIE_mA": 19.7689,
+      "NIE_scr": 8.9472,
+      "NIE_gap": 10.8217,
+      "m_mA_thru_mA_fc2": 8.3943,
+      "m_mAB_thru_mAB_fc2": -12.0802,
+      "m_mA_thru_mAB_fc2": 7.6887,
+      "m_mAB_thru_mA_fc2": -9.7054,
+      "m_scr_thru_mAB_fc2": -3.133,
+      "m_scr_thru_mA_fc2": -3.2217
+    }
+  },
+  {
+    "seed": 1235,
+    "status": "OK",
+    "scratch_blue": true,
+    "SS1": {
+      "cos_colA_colAB": 0.8047,
+      "cos_colA_colScr": 0.1109,
+      "cos_colAB_colScr": 0.0839,
+      "preact_abl_delta_AB": 1.3675,
+      "preact_ctrl_delta_AB": -0.758,
+      "preact_abl_delta_scratch": 0.2611,
+      "specificity_AB": 1.8,
+      "AB_vs_scratch_ratio": 5.24
+    },
+    "SS2": {
+      "mAB": {
+        "m_nat_red_blue": -11.5701,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -12.9213,
+            "shift": -1.3513,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -12.4735,
+            "shift": -0.9034,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -11.5701,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -10.3941,
+            "shift": 1.176,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -9.2149,
+            "shift": 2.3552,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -7.1898,
+            "shift": 4.3803,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": -4.6805,
+            "shift": 6.8896,
+            "pred_red": false
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": 1.1821
+          },
+          {
+            "alpha": -2,
+            "shift": 0.2831
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": 0.8909
+          },
+          {
+            "alpha": 4,
+            "shift": 2.5644
+          },
+          {
+            "alpha": 8,
+            "shift": 5.4628
+          },
+          {
+            "alpha": 16,
+            "shift": 9.9593
+          }
+        ],
+        "shift_at_alpha8": 4.3803,
+        "ctrl_at_alpha8": 5.4628,
+        "recovers_red_at8": false
+      },
+      "scratch": {
+        "m_nat_red_blue": -13.8124,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -13.3642,
+            "shift": 0.4481,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -14.0682,
+            "shift": -0.2558,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -13.8124,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -12.3176,
+            "shift": 1.4947,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -9.8502,
+            "shift": 3.9621,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -5.3227,
+            "shift": 8.4897,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": -1.9332,
+            "shift": 11.8791,
+            "pred_red": false
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": -0.1612
+          },
+          {
+            "alpha": -2,
+            "shift": -0.268
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": 0.9361
+          },
+          {
+            "alpha": 4,
+            "shift": 3.0162
+          },
+          {
+            "alpha": 8,
+            "shift": 8.0072
+          },
+          {
+            "alpha": 16,
+            "shift": 14.497
+          }
+        ],
+        "shift_at_alpha8": 8.4897,
+        "ctrl_at_alpha8": 8.0072,
+        "recovers_red_at8": false
+      }
+    },
+    "SS3": {
+      "mAB_transplant": {
+        "pred_blue": true,
+        "m_nat": 10.488,
+        "abl_delta": 0.722,
+        "ctrl_delta": -0.2757,
+        "specificity": 2.62
+      },
+      "mSCR_transplant": {
+        "pred_blue": true,
+        "m_nat": 10.4442,
+        "abl_delta": 0.0672,
+        "ctrl_delta": -0.9678,
+        "specificity": 0.07
+      }
+    },
+    "SS4": {
+      "NIE_mA": 19.9463,
+      "NIE_scr": 11.3812,
+      "NIE_gap": 8.565,
+      "m_mA_thru_mA_fc2": 8.5481,
+      "m_mAB_thru_mAB_fc2": -11.5701,
+      "m_mA_thru_mAB_fc2": 8.3762,
+      "m_mAB_thru_mA_fc2": -9.6139,
+      "m_scr_thru_mAB_fc2": -0.1889,
+      "m_scr_thru_mA_fc2": 0.1773
+    }
+  },
+  {
+    "seed": 1236,
+    "status": "OK",
+    "scratch_blue": true,
+    "SS1": {
+      "cos_colA_colAB": 0.8949,
+      "cos_colA_colScr": -0.005,
+      "cos_colAB_colScr": -0.0347,
+      "preact_abl_delta_AB": -3.6116,
+      "preact_ctrl_delta_AB": 0.0165,
+      "preact_abl_delta_scratch": -0.0033,
+      "specificity_AB": 219.04,
+      "AB_vs_scratch_ratio": 1102.81
+    },
+    "SS2": {
+      "mAB": {
+        "m_nat_red_blue": -11.6846,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -10.6122,
+            "shift": 1.0724,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -11.2816,
+            "shift": 0.403,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -11.6846,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -11.8875,
+            "shift": -0.203,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -11.9423,
+            "shift": -0.2577,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -11.7585,
+            "shift": -0.0739,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": -10.9417,
+            "shift": 0.7429,
+            "pred_red": false
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": 2.2514
+          },
+          {
+            "alpha": -2,
+            "shift": 0.7314
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": -0.0271
+          },
+          {
+            "alpha": 4,
+            "shift": 0.3538
+          },
+          {
+            "alpha": 8,
+            "shift": 1.333
+          },
+          {
+            "alpha": 16,
+            "shift": 2.7753
+          }
+        ],
+        "shift_at_alpha8": -0.0739,
+        "ctrl_at_alpha8": 1.333,
+        "recovers_red_at8": false
+      },
+      "scratch": {
+        "m_nat_red_blue": -13.4364,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -11.9068,
+            "shift": 1.5296,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -13.0343,
+            "shift": 0.4021,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -13.4364,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -12.9575,
+            "shift": 0.479,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -11.5848,
+            "shift": 1.8516,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -8.3062,
+            "shift": 5.1302,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": -4.7022,
+            "shift": 8.7342,
+            "pred_red": false
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": 1.0571
+          },
+          {
+            "alpha": -2,
+            "shift": 0.2501
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": 0.4571
+          },
+          {
+            "alpha": 4,
+            "shift": 1.7583
+          },
+          {
+            "alpha": 8,
+            "shift": 5.3756
+          },
+          {
+            "alpha": 16,
+            "shift": 10.1511
+          }
+        ],
+        "shift_at_alpha8": 5.1302,
+        "ctrl_at_alpha8": 5.3756,
+        "recovers_red_at8": false
+      }
+    },
+    "SS3": {
+      "mAB_transplant": {
+        "pred_blue": true,
+        "m_nat": 10.475,
+        "abl_delta": -4.5121,
+        "ctrl_delta": -0.0244,
+        "specificity": 184.58
+      },
+      "mSCR_transplant": {
+        "pred_blue": true,
+        "m_nat": 10.5691,
+        "abl_delta": 0.0312,
+        "ctrl_delta": -0.107,
+        "specificity": 0.29
+      }
+    },
+    "SS4": {
+      "NIE_mA": 19.7002,
+      "NIE_scr": 12.6544,
+      "NIE_gap": 7.0458,
+      "m_mA_thru_mA_fc2": 8.3628,
+      "m_mAB_thru_mAB_fc2": -11.6846,
+      "m_mA_thru_mAB_fc2": 8.0156,
+      "m_mAB_thru_mA_fc2": -8.2996,
+      "m_scr_thru_mAB_fc2": 0.9698,
+      "m_scr_thru_mA_fc2": -0.1153
+    }
+  },
+  {
+    "seed": 1237,
+    "status": "OK",
+    "scratch_blue": true,
+    "SS1": {
+      "cos_colA_colAB": 0.7645,
+      "cos_colA_colScr": -0.0362,
+      "cos_colAB_colScr": -0.0903,
+      "preact_abl_delta_AB": 4.2148,
+      "preact_ctrl_delta_AB": 0.0247,
+      "preact_abl_delta_scratch": -0.0275,
+      "specificity_AB": 170.64,
+      "AB_vs_scratch_ratio": 153.52
+    },
+    "SS2": {
+      "mAB": {
+        "m_nat_red_blue": -11.1368,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -14.2373,
+            "shift": -3.1004,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -12.9177,
+            "shift": -1.7809,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -11.1368,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -8.8631,
+            "shift": 2.2737,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -6.2305,
+            "shift": 4.9064,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -1.1456,
+            "shift": 9.9913,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": 4.5565,
+            "shift": 15.6934,
+            "pred_red": true
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": 0.3695
+          },
+          {
+            "alpha": -2,
+            "shift": 0.0239
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": 0.4541
+          },
+          {
+            "alpha": 4,
+            "shift": 1.3155
+          },
+          {
+            "alpha": 8,
+            "shift": 3.2656
+          },
+          {
+            "alpha": 16,
+            "shift": 6.0069
+          }
+        ],
+        "shift_at_alpha8": 9.9913,
+        "ctrl_at_alpha8": 3.2656,
+        "recovers_red_at8": false
+      },
+      "scratch": {
+        "m_nat_red_blue": -13.9948,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -13.7481,
+            "shift": 0.2466,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -14.1975,
+            "shift": -0.2028,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -13.9948,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -12.9788,
+            "shift": 1.0159,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -11.1671,
+            "shift": 2.8277,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -7.3179,
+            "shift": 6.6768,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": -2.2065,
+            "shift": 11.7882,
+            "pred_red": false
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": 2.794
+          },
+          {
+            "alpha": -2,
+            "shift": 0.8708
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": -0.006
+          },
+          {
+            "alpha": 4,
+            "shift": 0.433
+          },
+          {
+            "alpha": 8,
+            "shift": 1.9383
+          },
+          {
+            "alpha": 16,
+            "shift": 5.1419
+          }
+        ],
+        "shift_at_alpha8": 6.6768,
+        "ctrl_at_alpha8": 1.9383,
+        "recovers_red_at8": false
+      }
+    },
+    "SS3": {
+      "mAB_transplant": {
+        "pred_blue": true,
+        "m_nat": 8.9278,
+        "abl_delta": 2.0298,
+        "ctrl_delta": 0.0215,
+        "specificity": 94.37
+      },
+      "mSCR_transplant": {
+        "pred_blue": true,
+        "m_nat": 11.0458,
+        "abl_delta": -0.0206,
+        "ctrl_delta": -0.213,
+        "specificity": 0.1
+      }
+    },
+    "SS4": {
+      "NIE_mA": 19.4693,
+      "NIE_scr": 11.0444,
+      "NIE_gap": 8.4249,
+      "m_mA_thru_mA_fc2": 8.3177,
+      "m_mAB_thru_mAB_fc2": -11.1368,
+      "m_mA_thru_mAB_fc2": 8.3325,
+      "m_mAB_thru_mA_fc2": -9.1184,
+      "m_scr_thru_mAB_fc2": -0.0924,
+      "m_scr_thru_mA_fc2": -0.0322
+    }
+  },
+  {
+    "seed": 1238,
+    "status": "OK",
+    "scratch_blue": true,
+    "SS1": {
+      "cos_colA_colAB": 0.8374,
+      "cos_colA_colScr": 0.0406,
+      "cos_colAB_colScr": 0.0952,
+      "preact_abl_delta_AB": -1.3592,
+      "preact_ctrl_delta_AB": -0.3645,
+      "preact_abl_delta_scratch": -0.6824,
+      "specificity_AB": 3.73,
+      "AB_vs_scratch_ratio": 1.99
+    },
+    "SS2": {
+      "mAB": {
+        "m_nat_red_blue": -11.1605,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -10.866,
+            "shift": 0.2945,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -11.1499,
+            "shift": 0.0106,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -11.1605,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -10.8738,
+            "shift": 0.2867,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -10.3543,
+            "shift": 0.8063,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -9.051,
+            "shift": 2.1096,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": -6.7475,
+            "shift": 4.4131,
+            "pred_red": false
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": 2.7626
+          },
+          {
+            "alpha": -2,
+            "shift": 0.864
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": 0.8773
+          },
+          {
+            "alpha": 4,
+            "shift": 2.5327
+          },
+          {
+            "alpha": 8,
+            "shift": 4.6136
+          },
+          {
+            "alpha": 16,
+            "shift": 5.5041
+          }
+        ],
+        "shift_at_alpha8": 2.1096,
+        "ctrl_at_alpha8": 4.6136,
+        "recovers_red_at8": false
+      },
+      "scratch": {
+        "m_nat_red_blue": -14.6716,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -11.9779,
+            "shift": 2.6938,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -13.7648,
+            "shift": 0.9069,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -14.6716,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -14.6875,
+            "shift": -0.0159,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -13.8672,
+            "shift": 0.8044,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -11.774,
+            "shift": 2.8977,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": -8.2307,
+            "shift": 6.4409,
+            "pred_red": false
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": 1.114
+          },
+          {
+            "alpha": -2,
+            "shift": 0.488
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": -0.1218
+          },
+          {
+            "alpha": 4,
+            "shift": 0.6696
+          },
+          {
+            "alpha": 8,
+            "shift": 3.925
+          },
+          {
+            "alpha": 16,
+            "shift": 7.7337
+          }
+        ],
+        "shift_at_alpha8": 2.8977,
+        "ctrl_at_alpha8": 3.925,
+        "recovers_red_at8": false
+      }
+    },
+    "SS3": {
+      "mAB_transplant": {
+        "pred_blue": true,
+        "m_nat": 10.025,
+        "abl_delta": -1.4537,
+        "ctrl_delta": -0.3666,
+        "specificity": 3.97
+      },
+      "mSCR_transplant": {
+        "pred_blue": true,
+        "m_nat": 11.3605,
+        "abl_delta": -0.5981,
+        "ctrl_delta": -0.2465,
+        "specificity": 2.43
+      }
+    },
+    "SS4": {
+      "NIE_mA": 19.2733,
+      "NIE_scr": 9.114,
+      "NIE_gap": 10.1593,
+      "m_mA_thru_mA_fc2": 8.4795,
+      "m_mAB_thru_mAB_fc2": -11.1605,
+      "m_mA_thru_mAB_fc2": 8.1127,
+      "m_mAB_thru_mA_fc2": -8.8322,
+      "m_scr_thru_mAB_fc2": -2.0466,
+      "m_scr_thru_mA_fc2": -1.5688
+    }
+  },
+  {
+    "seed": 1239,
+    "status": "OK",
+    "scratch_blue": true,
+    "SS1": {
+      "cos_colA_colAB": 0.7935,
+      "cos_colA_colScr": 0.1408,
+      "cos_colAB_colScr": 0.0091,
+      "preact_abl_delta_AB": -2.8097,
+      "preact_ctrl_delta_AB": 0.0015,
+      "preact_abl_delta_scratch": -1.1,
+      "specificity_AB": 1893.45,
+      "AB_vs_scratch_ratio": 2.55
+    },
+    "SS2": {
+      "mAB": {
+        "m_nat_red_blue": -11.9875,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -10.7469,
+            "shift": 1.2406,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -11.7078,
+            "shift": 0.2798,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -11.9875,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -11.8382,
+            "shift": 0.1494,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -11.4726,
+            "shift": 0.5149,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -10.5979,
+            "shift": 1.3896,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": -8.9866,
+            "shift": 3.0009,
+            "pred_red": false
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": 1.7315
+          },
+          {
+            "alpha": -2,
+            "shift": 0.4378
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": 0.7681
+          },
+          {
+            "alpha": 4,
+            "shift": 2.0871
+          },
+          {
+            "alpha": 8,
+            "shift": 4.2462
+          },
+          {
+            "alpha": 16,
+            "shift": 6.9721
+          }
+        ],
+        "shift_at_alpha8": 1.3896,
+        "ctrl_at_alpha8": 4.2462,
+        "recovers_red_at8": false
+      },
+      "scratch": {
+        "m_nat_red_blue": -16.9115,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -13.7182,
+            "shift": 3.1933,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -15.6092,
+            "shift": 1.3023,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -16.9115,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -17.6482,
+            "shift": -0.7366,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -17.7324,
+            "shift": -0.8209,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -15.689,
+            "shift": 1.2225,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": -11.5341,
+            "shift": 5.3774,
+            "pred_red": false
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": 1.2656
+          },
+          {
+            "alpha": -2,
+            "shift": 0.1973
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": 0.2277
+          },
+          {
+            "alpha": 4,
+            "shift": 0.7644
+          },
+          {
+            "alpha": 8,
+            "shift": 2.7151
+          },
+          {
+            "alpha": 16,
+            "shift": 6.0474
+          }
+        ],
+        "shift_at_alpha8": 1.2225,
+        "ctrl_at_alpha8": 2.7151,
+        "recovers_red_at8": false
+      }
+    },
+    "SS3": {
+      "mAB_transplant": {
+        "pred_blue": true,
+        "m_nat": 9.8734,
+        "abl_delta": -1.9901,
+        "ctrl_delta": 0.0539,
+        "specificity": 36.91
+      },
+      "mSCR_transplant": {
+        "pred_blue": true,
+        "m_nat": 13.4831,
+        "abl_delta": -0.8699,
+        "ctrl_delta": -0.0675,
+        "specificity": 12.89
+      }
+    },
+    "SS4": {
+      "NIE_mA": 20.4381,
+      "NIE_scr": 14.2743,
+      "NIE_gap": 6.1638,
+      "m_mA_thru_mA_fc2": 9.3732,
+      "m_mAB_thru_mAB_fc2": -11.9875,
+      "m_mA_thru_mAB_fc2": 8.4506,
+      "m_mAB_thru_mA_fc2": -9.4863,
+      "m_scr_thru_mAB_fc2": 2.2868,
+      "m_scr_thru_mA_fc2": 2.871
+    }
+  },
+  {
+    "seed": 1240,
+    "status": "OK",
+    "scratch_blue": true,
+    "SS1": {
+      "cos_colA_colAB": 0.8488,
+      "cos_colA_colScr": -0.195,
+      "cos_colAB_colScr": -0.0432,
+      "preact_abl_delta_AB": -5.5496,
+      "preact_ctrl_delta_AB": 0.0499,
+      "preact_abl_delta_scratch": -1.6829,
+      "specificity_AB": 111.11,
+      "AB_vs_scratch_ratio": 3.3
+    },
+    "SS2": {
+      "mAB": {
+        "m_nat_red_blue": -12.6214,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -10.4802,
+            "shift": 2.1412,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -11.8237,
+            "shift": 0.7977,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -12.6214,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -13.0737,
+            "shift": -0.4522,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -13.3436,
+            "shift": -0.7222,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -13.6108,
+            "shift": -0.9894,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": -13.5571,
+            "shift": -0.9357,
+            "pred_red": false
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": 1.3291
+          },
+          {
+            "alpha": -2,
+            "shift": 0.4909
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": 0.0889
+          },
+          {
+            "alpha": 4,
+            "shift": 0.8519
+          },
+          {
+            "alpha": 8,
+            "shift": 2.6651
+          },
+          {
+            "alpha": 16,
+            "shift": 5.1582
+          }
+        ],
+        "shift_at_alpha8": -0.9894,
+        "ctrl_at_alpha8": 2.6651,
+        "recovers_red_at8": false
+      },
+      "scratch": {
+        "m_nat_red_blue": -14.9683,
+        "steer_curve": [
+          {
+            "alpha": -4,
+            "m_red_blue": -15.8304,
+            "shift": -0.8621,
+            "pred_red": false
+          },
+          {
+            "alpha": -2,
+            "m_red_blue": -15.8804,
+            "shift": -0.9121,
+            "pred_red": false
+          },
+          {
+            "alpha": 0,
+            "m_red_blue": -14.9683,
+            "shift": 0.0,
+            "pred_red": false
+          },
+          {
+            "alpha": 2,
+            "m_red_blue": -13.0922,
+            "shift": 1.876,
+            "pred_red": false
+          },
+          {
+            "alpha": 4,
+            "m_red_blue": -10.3961,
+            "shift": 4.5722,
+            "pred_red": false
+          },
+          {
+            "alpha": 8,
+            "m_red_blue": -5.5287,
+            "shift": 9.4395,
+            "pred_red": false
+          },
+          {
+            "alpha": 16,
+            "m_red_blue": 0.2864,
+            "shift": 15.2547,
+            "pred_red": true
+          }
+        ],
+        "ctrl_curve": [
+          {
+            "alpha": -4,
+            "shift": 1.5224
+          },
+          {
+            "alpha": -2,
+            "shift": 0.5823
+          },
+          {
+            "alpha": 0,
+            "shift": 0.0
+          },
+          {
+            "alpha": 2,
+            "shift": 0.0864
+          },
+          {
+            "alpha": 4,
+            "shift": 1.2215
+          },
+          {
+            "alpha": 8,
+            "shift": 5.0213
+          },
+          {
+            "alpha": 16,
+            "shift": 9.5021
+          }
+        ],
+        "shift_at_alpha8": 9.4395,
+        "ctrl_at_alpha8": 5.0213,
+        "recovers_red_at8": false
+      }
+    },
+    "SS3": {
+      "mAB_transplant": {
+        "pred_blue": true,
+        "m_nat": 11.5872,
+        "abl_delta": -3.9954,
+        "ctrl_delta": 0.1458,
+        "specificity": 27.41
+      },
+      "mSCR_transplant": {
+        "pred_blue": true,
+        "m_nat": 11.1887,
+        "abl_delta": -1.4714,
+        "ctrl_delta": -0.1787,
+        "specificity": 8.23
+      }
+    },
+    "SS4": {
+      "NIE_mA": 20.3423,
+      "NIE_scr": 12.5322,
+      "NIE_gap": 7.81,
+      "m_mA_thru_mA_fc2": 8.7853,
+      "m_mAB_thru_mAB_fc2": -12.6214,
+      "m_mA_thru_mAB_fc2": 7.7208,
+      "m_mAB_thru_mA_fc2": -9.2543,
+      "m_scr_thru_mAB_fc2": -0.0892,
+      "m_scr_thru_mA_fc2": -1.115
+    }
+  }
+]
